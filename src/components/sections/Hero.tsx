@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
+import { LiveTimestamp } from '@/components/ui/LiveTimestamp';
 import { HeroAnimation } from './HeroAnimation';
 
 export function Hero() {
@@ -50,7 +51,10 @@ export function Hero() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="relative pt-12 pb-20 md:pt-20 md:pb-32">
+    <section ref={container} id="hero" className="relative pt-12 pb-20 md:pt-20 md:pb-32">
+      <div className="absolute top-3 right-6 md:right-8 z-10 pointer-events-none">
+        <LiveTimestamp />
+      </div>
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-14 lg:gap-16 items-center">
           <div>

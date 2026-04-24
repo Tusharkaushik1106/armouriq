@@ -172,7 +172,7 @@ export function HowItWorks() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="relative">
+    <section ref={container} id="how-it-works" className="relative">
       {/* Single panel tree — CSS changes the layout axis between desktop (pinned horizontal) and mobile (stacked). */}
       <div className="pin-wrap md:h-screen md:overflow-hidden bg-[var(--color-bg)]">
         <div className="track flex flex-col md:flex-row md:h-full" style={{}}>

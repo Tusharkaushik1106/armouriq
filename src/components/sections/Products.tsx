@@ -428,6 +428,9 @@ export function Products() {
             <div
               key={p.key}
               data-product={p.key}
+              data-proximity-glow="true"
+              data-proximity-max="260"
+              data-proximity-opacity="0.4"
               className="product-card group relative bg-white border border-[var(--color-border)] rounded-xl p-7 md:p-8 card-shadow hover:card-shadow-hover hover:-translate-y-1 hover:border-[var(--color-primary)] transition-all duration-300 flex flex-col min-h-[280px] overflow-hidden"
             >
               <PatternBg id={p.patternId} />

@@ -244,7 +244,7 @@ export function Comparison() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="py-24 md:py-36 bg-[var(--color-bg)]">
+    <section ref={container} id="comparison" className="py-24 md:py-36 bg-[var(--color-bg)]">
       <Container>
         <div className="max-w-3xl mb-14">
           <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-5">

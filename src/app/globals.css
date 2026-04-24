@@ -78,6 +78,38 @@
   box-shadow: 0 4px 8px rgba(45,45,45,0.04), 0 12px 32px rgba(45,45,45,0.08);
 }
 
+/* Site-wide grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+/* Button active state */
+button:active, a:active {
+  transform: scale(0.985);
+  transition: transform 0.08s ease;
+}
+
+/* Proximity glow helper — the mousemove listener sets --proximity-glow 0..1 */
+[data-proximity-glow] {
+  position: relative;
+}
+[data-proximity-glow]::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(224, 123, 76, var(--proximity-glow, 0));
+  pointer-events: none;
+  transition: border-color 0.15s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
