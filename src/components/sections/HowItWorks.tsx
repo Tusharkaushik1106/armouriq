@@ -27,10 +27,16 @@ function StepIllustration({ n }: { n: number }) {
     return (
       <div className="mt-8 grid grid-cols-1 gap-2 max-w-md">
         {['support-agent-1', 'analyst-agent', 'billing-bot', 'docs-agent'].map((a, i) => (
-          <div key={a} className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-lg px-4 py-3 card-shadow" style={{ opacity: 0.85, transform: `translateX(${i * 4}px)` }}>
+          <div
+            key={a}
+            className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-lg px-4 py-3 card-shadow"
+            style={{ opacity: 0.85, transform: `translateX(${i * 4}px)` }}
+          >
             <span className="w-2 h-2 rounded-full bg-[var(--color-success)]" />
             <span className="font-mono text-xs text-[var(--color-text-medium)]">{a}</span>
-            <span className="ml-auto font-mono text-[10px] text-[var(--color-text-light)] uppercase tracking-[0.1em]">registered</span>
+            <span className="ml-auto font-mono text-[10px] text-[var(--color-text-light)] uppercase tracking-[0.1em]">
+              registered
+            </span>
           </div>
         ))}
       </div>
@@ -39,13 +45,17 @@ function StepIllustration({ n }: { n: number }) {
   if (n === 1) {
     return (
       <div className="mt-8 max-w-md bg-white border border-[var(--color-border)] rounded-lg p-5 card-shadow">
-        <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-3">Intent Check</div>
+        <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-3">
+          Intent Check
+        </div>
         <div className="flex items-center gap-3 text-[12px] font-mono">
           <span className="px-2 py-1 rounded bg-[var(--color-surface)] border border-[var(--color-border)]">DELETE /users/42</span>
           <span className="text-[var(--color-text-light)]">→</span>
           <span className="px-2 py-1 rounded bg-[var(--color-danger-bg)] border border-[rgba(198,61,61,0.3)] text-[var(--color-danger)]">BLOCKED</span>
         </div>
-        <div className="mt-3 text-[11px] text-[var(--color-text-light)] font-mono">Reason: exceeds delegated scope</div>
+        <div className="mt-3 text-[11px] text-[var(--color-text-light)] font-mono">
+          Reason: exceeds delegated scope
+        </div>
       </div>
     );
   }
@@ -64,9 +74,9 @@ export function HowItWorks() {
 
   useGSAP(() => {
     if (!container.current) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mm = gsap.matchMedia();
 
-    // closing line reveal - always runs
+    // Closing line — universal
     const closing = container.current.querySelector('.hiw-closing');
     if (closing) {
       gsap.set(closing.querySelectorAll('.split-inner'), { y: '100%' });
@@ -75,6 +85,7 @@ export function HowItWorks() {
         start: 'top 75%',
         once: true,
         onEnter: () => {
+          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (reduced) {
             gsap.set(closing.querySelectorAll('.split-inner'), { y: 0 });
             gsap.set('.hiw-closing-underline', { scaleX: 1 });
@@ -95,12 +106,52 @@ export function HowItWorks() {
       });
     }
 
-    if (reduced) return;
+    // Desktop only: pinned horizontal
+    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
+      const track = container.current!.querySelector<HTMLDivElement>('.track');
+      const panels = gsap.utils.toArray<HTMLElement>('.panel', container.current!);
+      if (!track || panels.length === 0) return;
 
-    const isMobile = window.innerWidth < 768;
-    if (isMobile) {
-      // stacked panels with scroll fade
-      const panels = container.current.querySelectorAll<HTMLElement>('.panel');
+      const totalScroll = (panels.length - 1) * window.innerWidth;
+
+      const horizontalTween = gsap.to(track, {
+        x: -totalScroll,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container.current,
+          start: 'top top',
+          end: () => `+=${totalScroll}`,
+          pin: '.pin-wrap',
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      panels.forEach((panel) => {
+        const content = panel.querySelector<HTMLElement>('.panel-content');
+        if (!content) return;
+        gsap.fromTo(
+          content,
+          { opacity: 0.3, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: horizontalTween,
+              start: 'left center',
+              end: 'right center',
+              scrub: true,
+            },
+          }
+        );
+      });
+    });
+
+    // Mobile only: per-panel fade on scroll
+    mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+      const panels = container.current!.querySelectorAll<HTMLElement>('.panel');
       panels.forEach((p) => {
         gsap.fromTo(
           p.querySelectorAll('.panel-content > *'),
@@ -115,131 +166,61 @@ export function HowItWorks() {
           }
         );
       });
-      return;
-    }
-
-    const track = container.current.querySelector<HTMLDivElement>('.track');
-    const panels = gsap.utils.toArray<HTMLElement>('.panel');
-    if (!track || panels.length === 0) return;
-    const totalScroll = (panels.length - 1) * window.innerWidth;
-
-    const horizontalTween = gsap.to(track, {
-      x: -totalScroll,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: container.current,
-        start: 'top top',
-        end: () => `+=${totalScroll}`,
-        pin: '.pin-wrap',
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
     });
 
-    panels.forEach((panel) => {
-      const content = panel.querySelector<HTMLElement>('.panel-content');
-      if (!content) return;
-      gsap.fromTo(
-        content,
-        { opacity: 0.3, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          scrollTrigger: {
-            trigger: panel,
-            containerAnimation: horizontalTween,
-            start: 'left center',
-            end: 'right center',
-            scrub: true,
-          },
-        }
-      );
-    });
-
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+    return () => mm.revert();
   }, { scope: container });
 
   return (
     <section ref={container} className="relative">
-      {/* Desktop: pinned horizontal */}
-      <div className="hidden md:block">
-        <div className="pin-wrap h-screen overflow-hidden bg-[var(--color-bg)]">
-          <div className="track flex h-full" style={{ width: `${steps.length * 100}vw` }}>
-            {steps.map((s, i) => (
-              <div key={s.num} className="panel w-screen h-full flex-shrink-0">
-                <div className="h-full flex items-center">
-                  <Container className="w-full">
-                    <div className="grid grid-cols-[auto_1fr] gap-10 lg:gap-16 items-center panel-content">
-                      <div className="relative pl-6">
-                        <div className="absolute left-0 top-6 bottom-6 w-[3px] bg-[var(--color-primary)] rounded-full" />
-                        <div
-                          className="font-bold leading-none text-[var(--color-text-light)]"
-                          style={{
-                            fontSize: 'clamp(140px, 20vw, 260px)',
-                            letterSpacing: '-0.04em',
-                          }}
-                        >
-                          {s.num}
-                        </div>
-                      </div>
-                      <div className="max-w-xl">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-4">
-                          Step {s.num}
-                        </div>
-                        <h3
-                          className="font-bold text-[var(--color-text-dark)] mb-5"
-                          style={{
-                            fontSize: 'clamp(28px, 3.2vw, 44px)',
-                            letterSpacing: '-0.02em',
-                            lineHeight: 1.1,
-                          }}
-                        >
-                          {s.title}
-                        </h3>
-                        <p className="text-[16px] font-light leading-[1.7] text-[var(--color-text-medium)]">
-                          {s.body}
-                        </p>
-                        <StepIllustration n={i} />
+      {/* Single panel tree — CSS changes the layout axis between desktop (pinned horizontal) and mobile (stacked). */}
+      <div className="pin-wrap md:h-screen md:overflow-hidden bg-[var(--color-bg)]">
+        <div className="track flex flex-col md:flex-row md:h-full" style={{}}>
+          {steps.map((s, i) => (
+            <div
+              key={s.num}
+              className="panel flex-shrink-0 w-full md:w-screen md:h-full py-20 md:py-0"
+            >
+              <div className="md:h-full flex md:items-center">
+                <Container className="w-full">
+                  <div className="panel-content grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-10 lg:gap-16 md:items-center">
+                    <div className="relative md:pl-6">
+                      <div className="hidden md:block absolute left-0 top-6 bottom-6 w-[3px] bg-[var(--color-primary)] rounded-full" />
+                      <div
+                        className="font-bold leading-none text-[var(--color-text-light)]"
+                        style={{
+                          fontSize: 'clamp(100px, 20vw, 260px)',
+                          letterSpacing: '-0.04em',
+                        }}
+                      >
+                        {s.num}
                       </div>
                     </div>
-                  </Container>
-                </div>
+                    <div className="max-w-xl">
+                      <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-4">
+                        Step {s.num}
+                      </div>
+                      <h3
+                        className="font-bold text-[var(--color-text-dark)] mb-5"
+                        style={{
+                          fontSize: 'clamp(26px, 3.2vw, 44px)',
+                          letterSpacing: '-0.02em',
+                          lineHeight: 1.1,
+                        }}
+                      >
+                        {s.title}
+                      </h3>
+                      <p className="text-[16px] font-light leading-[1.7] text-[var(--color-text-medium)]">
+                        {s.body}
+                      </p>
+                      <StepIllustration n={i} />
+                    </div>
+                  </div>
+                </Container>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* Mobile: stacked */}
-      <div className="md:hidden">
-        {steps.map((s, i) => (
-          <div key={s.num} className="panel py-20">
-            <Container>
-              <div className="panel-content">
-                <div
-                  className="font-bold leading-none text-[var(--color-text-light)] mb-5"
-                  style={{ fontSize: 'clamp(100px, 28vw, 160px)', letterSpacing: '-0.04em' }}
-                >
-                  {s.num}
-                </div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-3">
-                  Step {s.num}
-                </div>
-                <h3
-                  className="font-bold text-[var(--color-text-dark)] mb-4"
-                  style={{ fontSize: 'clamp(24px, 6vw, 32px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
-                >
-                  {s.title}
-                </h3>
-                <p className="text-[16px] font-light leading-[1.7] text-[var(--color-text-medium)]">
-                  {s.body}
-                </p>
-                <StepIllustration n={i} />
-              </div>
-            </Container>
-          </div>
-        ))}
       </div>
 
       {/* Closing line */}
