@@ -50,22 +50,23 @@ export function Problem() {
   }, { scope: ref });
 
   return (
-    <section ref={ref} id="problem" className="py-24 md:py-36 bg-[var(--color-bg)]">
+    <section ref={ref} id="problem" className="py-32 md:py-48 lg:py-56 bg-[var(--color-bg)]">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-14 lg:gap-20 items-center">
           <div>
             <div
-              className="problem-eyebrow font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-5"
+              className="problem-eyebrow flex items-center justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-light)] mb-6"
               style={{ opacity: 0 }}
             >
-              The Problem
+              <span>― 02</span>
+              <span>The Problem</span>
             </div>
             <h2
               className="problem-headline text-[var(--color-text-dark)] mb-7"
               style={{
-                fontSize: 'clamp(34px, 4.5vw, 54px)',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.08,
+                fontSize: 'clamp(48px, 7vw, 112px)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.02,
               }}
             >
               <SplitText splitBy="word">

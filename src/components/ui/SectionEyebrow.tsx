@@ -1,18 +1,18 @@
 type Props = {
-  prefix: string;
-  name: string;
-  id: string;
+  num: string;
+  label: string;
   className?: string;
 };
 
-export function SectionEyebrow({ prefix, name, id, className = '' }: Props) {
+// Standard eyebrow: `― 04   THE PLATFORM`
+// number dash at left, label at right, both mono 11px text-light.
+export function SectionEyebrow({ num, label, className = '' }: Props) {
   return (
     <div
-      className={`font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] ${className}`}
+      className={`flex items-center justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-light)] ${className}`}
     >
-      {`// ${prefix} //`}{' '}
-      <span className="text-[var(--color-text-medium)]">{name}</span>{' '}
-      {`// ${id}`}
+      <span>― {num}</span>
+      <span>{label}</span>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export function Footer() {
           <span
             className="font-bold text-[var(--color-text-light)] pr-12"
             style={{
-              fontSize: 'clamp(64px, 10vw, 128px)',
+              fontSize: 'clamp(96px, 14vw, 240px)',
               letterSpacing: '-0.04em',
               lineHeight: 1,
               opacity: 0.15,
@@ -50,7 +50,7 @@ export function Footer() {
           <span
             className="font-bold text-[var(--color-primary)] pr-12"
             style={{
-              fontSize: 'clamp(64px, 10vw, 128px)',
+              fontSize: 'clamp(96px, 14vw, 240px)',
               letterSpacing: '-0.04em',
               lineHeight: 1,
               opacity: 0.25,
@@ -61,7 +61,7 @@ export function Footer() {
           <span
             className="font-bold text-[var(--color-text-light)] pr-12"
             style={{
-              fontSize: 'clamp(64px, 10vw, 128px)',
+              fontSize: 'clamp(96px, 14vw, 240px)',
               letterSpacing: '-0.04em',
               lineHeight: 1,
               opacity: 0.15,
@@ -72,7 +72,7 @@ export function Footer() {
           <span
             className="font-bold text-[var(--color-primary)] pr-12"
             style={{
-              fontSize: 'clamp(64px, 10vw, 128px)',
+              fontSize: 'clamp(96px, 14vw, 240px)',
               letterSpacing: '-0.04em',
               lineHeight: 1,
               opacity: 0.25,

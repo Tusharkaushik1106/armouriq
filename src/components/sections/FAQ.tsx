@@ -87,19 +87,20 @@ export function FAQ() {
   }, { dependencies: [openIndex], scope: container });
 
   return (
-    <section ref={container} id="faq" className="py-24 md:py-36 bg-[var(--color-bg)]">
+    <section ref={container} id="faq" className="py-32 md:py-48 lg:py-56 bg-[var(--color-bg)]">
       <Container className="max-w-4xl">
-        <div className="text-center mb-16">
-          <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-5">
-            {'// TECHNICAL FAQ //'} <span className="text-[var(--color-text-medium)]">QUESTIONS</span> {'// 07'}
+        <div className="text-center mb-20 md:mb-24">
+          <div className="flex items-center justify-between max-w-sm mx-auto gap-6 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-light)] mb-6">
+            <span>― 07</span>
+            <span>FAQ</span>
           </div>
           <h2
-            className="faq-heading font-bold text-[var(--color-text-dark)] mb-5"
-            style={{ fontSize: 'clamp(36px, 4.5vw, 56px)', letterSpacing: '-0.02em', lineHeight: 1.08 }}
+            className="faq-heading font-bold text-[var(--color-text-dark)] mb-6"
+            style={{ fontSize: 'clamp(48px, 7vw, 112px)', letterSpacing: '-0.03em', lineHeight: 1.02 }}
           >
             <SplitText splitBy="word">Frequently Asked Questions</SplitText>
           </h2>
-          <p className="text-[17px] font-light leading-[1.6] text-[var(--color-text-medium)]">
+          <p className="text-[18px] md:text-[20px] font-light leading-[1.55] text-[var(--color-text-medium)]">
             Everything you need to know about ArmorIQ
           </p>
         </div>

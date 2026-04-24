@@ -96,20 +96,6 @@ button:active, a:active {
   transition: transform 0.08s ease;
 }
 
-/* Proximity glow helper — the mousemove listener sets --proximity-glow 0..1 */
-[data-proximity-glow] {
-  position: relative;
-}
-[data-proximity-glow]::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  border: 1px solid rgba(224, 123, 76, var(--proximity-glow, 0));
-  pointer-events: none;
-  transition: border-color 0.15s ease;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
