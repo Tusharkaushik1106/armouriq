@@ -48,6 +48,21 @@ export function Hero() {
         1.3
       )
       .add('animStart', 1.5);
+
+    // Parallax the firewall panel — translates slower than scroll
+    const panel = container.current.querySelector('.hero-anim');
+    if (panel) {
+      gsap.to(panel, {
+        y: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
   }, { scope: container });
 
   return (

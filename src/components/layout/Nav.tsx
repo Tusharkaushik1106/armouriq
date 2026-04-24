@@ -44,7 +44,19 @@ export function Nav() {
         style={{ opacity: 0 }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2.5" aria-label="ArmorIQ home">
+          <a
+            href="#"
+            className="flex items-center gap-2.5 logo-glitch"
+            aria-label="ArmorIQ home"
+            onMouseEnter={(e) => {
+              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+              const el = e.currentTarget;
+              gsap.timeline()
+                .to(el, { x: -2, duration: 0.04, ease: 'none' })
+                .to(el, { x: 2, duration: 0.04, ease: 'none' })
+                .to(el, { x: 0, duration: 0.04, ease: 'none' });
+            }}
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
                 d="M12 2L3 6V12C3 17 7 21.5 12 22C17 21.5 21 17 21 12V6L12 2Z"

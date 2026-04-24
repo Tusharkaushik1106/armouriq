@@ -214,8 +214,8 @@ export function CTA() {
           Join the teams building safer, compliant AI agent deployments.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <div className="cta-btn cta-primary rounded-lg" style={{ opacity: 0 }}>
-            <Button as="a" href="#" variant="primary" magnetic>
+          <div className="cta-btn cta-primary relative rounded-lg" style={{ opacity: 0 }}>
+            <Button as="a" href="#" variant="primary" magnetic trail>
               Book a Demo
             </Button>
           </div>

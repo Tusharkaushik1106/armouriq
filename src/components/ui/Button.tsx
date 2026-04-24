@@ -9,6 +9,7 @@ type CommonProps = {
   className?: string;
   variant?: Variant;
   magnetic?: boolean;
+  trail?: boolean;
   ariaLabel?: string;
 };
 
@@ -39,7 +40,7 @@ const variants: Record<Variant, string> = {
 };
 
 export function Button(props: Props) {
-  const { variant = 'primary', magnetic = false, className = '', children, ariaLabel } = props;
+  const { variant = 'primary', magnetic = false, trail = false, className = '', children, ariaLabel } = props;
   const classes = `${base} ${variants[variant]} ${className}`;
 
   const inner = <span className="inline-flex items-center gap-2">{children}</span>;
@@ -47,7 +48,7 @@ export function Button(props: Props) {
   if (props.as === 'button') {
     if (magnetic) {
       return (
-        <MagneticButton onClick={props.onClick} className={classes} ariaLabel={ariaLabel}>
+        <MagneticButton onClick={props.onClick} className={classes} ariaLabel={ariaLabel} trail={trail}>
           {inner}
         </MagneticButton>
       );
@@ -62,7 +63,7 @@ export function Button(props: Props) {
   // anchor
   if (magnetic) {
     return (
-      <MagneticButton href={props.href} className={classes} ariaLabel={ariaLabel}>
+      <MagneticButton href={props.href} className={classes} ariaLabel={ariaLabel} trail={trail}>
         {inner}
       </MagneticButton>
     );
