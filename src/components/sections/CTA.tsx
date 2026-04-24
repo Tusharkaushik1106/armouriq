@@ -40,40 +40,27 @@ export function CTA() {
     }
 
     if (!reduced) {
-      gsap.fromTo(
+      // Single scrollTrigger-driven timeline for sub + buttons + rule
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: ref.current, start: 'top 65%' },
+      });
+      tl.fromTo(
         ref.current.querySelector('.cta-sub'),
         { opacity: 0, y: 16 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: ref.current, start: 'top 65%' },
-        }
-      );
-      gsap.fromTo(
-        ref.current.querySelectorAll('.cta-btn'),
-        { opacity: 0, scale: 0.96 },
-        {
-          opacity: 1,
-          scale: 1,
-          stagger: 0.1,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: ref.current, start: 'top 65%' },
-        }
-      );
-      gsap.fromTo(
-        '.cta-rule',
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 0.9,
-          ease: 'power3.out',
-          delay: 0.5,
-          scrollTrigger: { trigger: ref.current, start: 'top 65%' },
-        }
-      );
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+      )
+        .fromTo(
+          ref.current.querySelectorAll('.cta-btn'),
+          { opacity: 0, scale: 0.96 },
+          { opacity: 1, scale: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out' },
+          '-=0.5'
+        )
+        .fromTo(
+          '.cta-rule',
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.9, ease: 'power3.out' },
+          '-=0.3'
+        );
     }
   }, { scope: ref });
 

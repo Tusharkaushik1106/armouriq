@@ -4,9 +4,12 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { HeroAnimation } from './HeroAnimation';
+import { useMediaQuery } from '@/lib/useMediaQuery';
 
 export function HeroHandoff() {
   const container = useRef<HTMLElement>(null);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const showMobile = isDesktop === false;
 
   useGSAP(() => {
     if (!container.current) return;
@@ -190,46 +193,50 @@ export function HeroHandoff() {
               </div>
             </div>
 
-            {/* Firewall layer — absolute, grows over scroll */}
-            <div
-              className="hero-firewall-wrap hidden md:block absolute top-1/2 left-1/2 pointer-events-none"
-              style={{
-                width: 'min(720px, 55vw)',
-                aspectRatio: '1 / 1',
-                transform: 'translate(-50%, -50%)',
-                transformOrigin: 'center center',
-              }}
-            >
-              <div className="pointer-events-auto">
-                <HeroAnimation />
-              </div>
+            {/* Firewall layer — desktop only, absolute, grows over scroll */}
+            {!showMobile && (
               <div
-                className="hero-handoff-label absolute left-0 right-0 text-center mt-6 font-bold text-[var(--color-text-dark)]"
+                className="hero-firewall-wrap absolute top-1/2 left-1/2 pointer-events-none"
                 style={{
-                  top: '100%',
-                  fontSize: 'clamp(28px, 3.5vw, 56px)',
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.1,
-                  opacity: 0,
+                  width: 'min(720px, 55vw)',
+                  aspectRatio: '1 / 1',
+                  transform: 'translate(-50%, -50%)',
+                  transformOrigin: 'center center',
                 }}
               >
-                Every action, inspected.
+                <div className="pointer-events-auto">
+                  <HeroAnimation />
+                </div>
+                <div
+                  className="hero-handoff-label absolute left-0 right-0 text-center mt-6 font-bold text-[var(--color-text-dark)]"
+                  style={{
+                    top: '100%',
+                    fontSize: 'clamp(28px, 3.5vw, 56px)',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.1,
+                    opacity: 0,
+                  }}
+                >
+                  Every action, inspected.
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Container>
       </div>
 
       {/* Mobile fallback — stack the firewall below the hero text */}
-      <div className="md:hidden px-6 pb-20">
-        <HeroAnimation />
-        <p
-          className="mt-6 text-center font-bold text-[var(--color-text-dark)]"
-          style={{ fontSize: 'clamp(24px, 6vw, 36px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
-        >
-          Every action, inspected.
-        </p>
-      </div>
+      {showMobile && (
+        <div className="px-6 pb-20">
+          <HeroAnimation />
+          <p
+            className="mt-6 text-center font-bold text-[var(--color-text-dark)]"
+            style={{ fontSize: 'clamp(24px, 6vw, 36px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
+          >
+            Every action, inspected.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
