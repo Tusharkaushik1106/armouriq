@@ -54,22 +54,33 @@ export function FAQ() {
       gsap.set(heading.querySelectorAll('.split-inner'), { y: 0 });
     }
 
-    // Animate open/close of panels
     items.forEach((_, i) => {
       const panel = container.current!.querySelector<HTMLElement>(`#faq-panel-${i}`);
-      const chev = container.current!.querySelector<HTMLElement>(`#faq-chev-${i}`);
-      if (!panel || !chev) return;
+      const plus = container.current!.querySelector<HTMLElement>(`#faq-plus-${i}`);
+      const leftBar = container.current!.querySelector<HTMLElement>(`#faq-bar-${i}`);
+      const item = container.current!.querySelector<HTMLElement>(`#faq-item-${i}`);
+      if (!panel || !plus || !leftBar || !item) return;
       if (openIndex === i) {
         if (reduced) {
           gsap.set(panel, { height: 'auto', opacity: 1 });
-          gsap.set(chev, { rotate: 180 });
+          gsap.set(plus, { rotate: 45 });
+          gsap.set(leftBar, { scaleY: 1 });
           return;
         }
         gsap.to(panel, { height: 'auto', opacity: 1, duration: 0.4, ease: 'power3.out' });
-        gsap.to(chev, { rotate: 180, duration: 0.3, ease: 'power3.out' });
+        gsap.to(plus, { rotate: 45, duration: 0.35, ease: 'power3.out' });
+        gsap.to(leftBar, { scaleY: 1, duration: 0.4, ease: 'power3.out' });
+        gsap.to(item, { backgroundColor: 'var(--color-surface)', duration: 0.3 });
       } else {
-        gsap.to(panel, { height: 0, opacity: reduced ? 0 : 0, duration: reduced ? 0 : 0.3, ease: 'power2.in' });
-        gsap.to(chev, { rotate: 0, duration: reduced ? 0 : 0.3, ease: 'power3.out' });
+        gsap.to(panel, {
+          height: 0,
+          opacity: 0,
+          duration: reduced ? 0 : 0.3,
+          ease: 'power2.in',
+        });
+        gsap.to(plus, { rotate: 0, duration: reduced ? 0 : 0.3, ease: 'power3.out' });
+        gsap.to(leftBar, { scaleY: 0, duration: reduced ? 0 : 0.3, ease: 'power3.in' });
+        gsap.to(item, { backgroundColor: 'transparent', duration: 0.3 });
       }
     });
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
@@ -80,7 +91,7 @@ export function FAQ() {
       <Container className="max-w-4xl">
         <div className="text-center mb-16">
           <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-5">
-            FAQ
+            {'// TECHNICAL FAQ //'} <span className="text-[var(--color-text-medium)]">QUESTIONS</span> {'// 07'}
           </div>
           <h2
             className="faq-heading font-bold text-[var(--color-text-dark)] mb-5"
@@ -99,28 +110,43 @@ export function FAQ() {
             return (
               <div
                 key={i}
-                className={`border-t border-[var(--color-border)] ${i === items.length - 1 ? 'border-b' : ''} group relative`}
+                id={`faq-item-${i}`}
+                className={`border-t border-[var(--color-border)] ${i === items.length - 1 ? 'border-b' : ''} group relative overflow-hidden`}
               >
+                {/* Open-state primary bar */}
+                <span
+                  id={`faq-bar-${i}`}
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--color-primary)]"
+                  style={{ transform: 'scaleY(0)', transformOrigin: 'top center' }}
+                />
+                {/* Hover hint bar */}
                 <span
                   aria-hidden="true"
-                  className={`absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--color-primary)] transition-transform duration-300 origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`}
+                  className={`absolute left-0 top-1/2 -translate-y-1/2 w-[60px] h-[2px] bg-[var(--color-primary)] transition-opacity duration-300 ${isOpen ? 'opacity-0' : 'opacity-0 group-hover:opacity-30'}`}
                 />
                 <button
                   id={`faq-trigger-${i}`}
-                  className="w-full flex items-center justify-between gap-6 py-6 md:py-7 text-left"
+                  className="relative w-full flex items-start gap-4 md:gap-6 py-6 md:py-7 text-left px-4 md:px-6"
                   aria-expanded={isOpen}
                   aria-controls={`faq-panel-${i}`}
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                 >
-                  <span className="text-[18px] md:text-[22px] font-medium text-[var(--color-text-dark)] tracking-[-0.01em] leading-snug">
+                  <span className="flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] pt-1.5">
+                    Q{i + 1}
+                  </span>
+                  <span
+                    className={`flex-1 text-[18px] md:text-[22px] tracking-[-0.01em] leading-snug transition-[font-weight,color] duration-300 ${isOpen ? 'font-medium text-[var(--color-text-dark)]' : 'font-normal text-[var(--color-text-dark)]'}`}
+                  >
                     {it.q}
                   </span>
                   <span
-                    id={`faq-chev-${i}`}
-                    className="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-medium)]"
+                    id={`faq-plus-${i}`}
+                    className="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-medium)] mt-0.5"
+                    aria-hidden="true"
                   >
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                      <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </span>
                 </button>
@@ -131,7 +157,7 @@ export function FAQ() {
                   className="overflow-hidden"
                   style={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
                 >
-                  <p className="pb-7 pr-14 text-[16px] md:text-[17px] font-light leading-[1.75] text-[var(--color-text-medium)] max-w-3xl">
+                  <p className="pb-7 pl-12 md:pl-[66px] pr-14 text-[16px] md:text-[17px] font-light leading-[1.75] text-[var(--color-text-medium)] max-w-3xl">
                     {it.a}
                   </p>
                 </div>

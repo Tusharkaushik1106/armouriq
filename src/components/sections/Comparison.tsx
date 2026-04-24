@@ -8,9 +8,10 @@ type Cell = { text: string; type: 'yes' | 'no' | 'dash' | 'text' };
 
 const columns = ['ArmorIQ', 'Guardrails', 'IAM / RBAC', 'Sandbox / Isolation', 'Observability / Logs'];
 
-const rows: { label: string; cells: string[] }[] = [
+const rows: { label: string; annotation?: string; cells: string[] }[] = [
   {
     label: 'Core question',
+    annotation: 'the ONLY question that matters',
     cells: [
       'Why is this action happening?',
       'Is the output safe?',
@@ -21,46 +22,24 @@ const rows: { label: string; cells: string[] }[] = [
   },
   {
     label: 'What it checks',
-    cells: [
-      'Every action & decision',
-      'Output text',
-      'Access permissions',
-      'Execution environment',
-      'Events, logs, traces',
-    ],
+    cells: ['Every action & decision', 'Output text', 'Access permissions', 'Execution environment', 'Events, logs, traces'],
   },
   {
     label: 'When it acts',
-    cells: [
-      'Before execution',
-      'After execution',
-      'At login / auth',
-      'During execution',
-      'After execution',
-    ],
+    annotation: 'pre-execution = prevention',
+    cells: ['Before execution', 'After execution', 'At login / auth', 'During execution', 'After execution'],
   },
   {
     label: 'What goes wrong',
-    cells: [
-      '—',
-      'Harmful output slips',
-      'Unauthorized access',
-      'Escape / breakout',
-      'Too late / alert fatigue',
-    ],
+    cells: ['—', 'Harmful output slips', 'Unauthorized access', 'Escape / breakout', 'Too late / alert fatigue'],
   },
   {
     label: 'What it verifies',
-    cells: [
-      'Intent validity',
-      'Content safety',
-      'Identity',
-      'Isolation boundaries',
-      'System behavior',
-    ],
+    cells: ['Intent validity', 'Content safety', 'Identity', 'Isolation boundaries', 'System behavior'],
   },
   {
     label: 'Stops rogue actions',
+    annotation: "the only 'Yes' in this column",
     cells: ['Yes', 'No', 'No', 'Contains, not prevents', 'No'],
   },
 ];
@@ -75,8 +54,9 @@ function classifyCell(text: string): Cell {
 function CellRender({ cell }: { cell: Cell }) {
   if (cell.type === 'yes') {
     return (
-      <div className="flex items-center gap-2">
-        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[rgba(61,139,92,0.12)]">
+      <div className="flex items-center gap-2 relative">
+        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[rgba(61,139,92,0.12)] relative">
+          <span className="check-halo absolute inset-0 rounded-full" style={{ border: '1px solid var(--color-primary)', opacity: 0, transform: 'scale(1)' }} aria-hidden="true" />
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
             <path className="check-draw" d="M2 5l2 2 4-4" stroke="var(--color-success)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -113,7 +93,6 @@ export function Comparison() {
     if (!container.current) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Closing line
     const closing = container.current.querySelector('.cmp-closing');
     if (closing) {
       gsap.set(closing.querySelectorAll('.split-inner'), { y: '100%' });
@@ -144,7 +123,6 @@ export function Comparison() {
 
     if (reduced) return;
 
-    // Heading reveal
     const heading = container.current.querySelector('.cmp-heading');
     if (heading) {
       gsap.set(heading.querySelectorAll('.split-inner'), { y: '100%' });
@@ -166,13 +144,19 @@ export function Comparison() {
     const table = container.current.querySelector<HTMLElement>('.cmp-table');
     if (!table) return;
 
-    const headers = table.querySelectorAll<HTMLElement>('.cmp-header');
-    const rowsEls = table.querySelectorAll<HTMLElement>('.cmp-row');
+    const compHeaders = table.querySelectorAll<HTMLElement>('.cmp-header-comp');
+    const armorHeader = table.querySelector<HTMLElement>('.cmp-header-armor');
     const sep = table.querySelector<HTMLElement>('.cmp-sep');
+    const rowsEls = table.querySelectorAll<HTMLElement>('.cmp-row');
+    const recommended = table.querySelector<HTMLElement>('.cmp-recommended');
+    const armorScan = table.querySelector<HTMLElement>('.cmp-armor-scan');
 
-    gsap.set(headers, { y: -120, opacity: 0 });
+    gsap.set(compHeaders, { y: -150, opacity: 0 });
+    gsap.set(armorHeader, { y: -250, opacity: 0 });
     gsap.set(sep, { scaleX: 0, transformOrigin: 'left center' });
     gsap.set(rowsEls, { opacity: 0 });
+    gsap.set(recommended, { opacity: 0, y: -6 });
+    gsap.set(armorScan, { opacity: 0, scaleX: 0, transformOrigin: 'left center' });
 
     ScrollTrigger.create({
       trigger: table,
@@ -180,27 +164,30 @@ export function Comparison() {
       once: true,
       onEnter: () => {
         const tl = gsap.timeline();
-        // headers drop
-        tl.to(headers, {
+        tl.to(compHeaders, {
           y: 0,
           opacity: 1,
-          stagger: 0.12,
-          duration: 0.7,
-          ease: 'power3.out',
+          stagger: 0.1,
+          duration: 0.6,
+          ease: 'power3.in',
         });
-        // ArmorIQ header bounce
-        const armorHeader = table.querySelector<HTMLElement>('.cmp-header-armor');
-        if (armorHeader) {
-          tl.fromTo(
-            armorHeader,
-            { scale: 1 },
-            { scale: 1.06, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.inOut' },
-            '>-0.3'
-          );
-        }
+        tl.to(armorHeader, {
+          y: 10,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power4.out',
+        }, '-=0.1');
+        tl.to(armorHeader, { y: 0, duration: 0.35, ease: 'power2.out' });
+        tl.to(armorScan, {
+          opacity: 1,
+          scaleX: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+        }, '<');
+        tl.to(armorScan, { opacity: 0, duration: 0.5, ease: 'power2.in' }, '>-0.1');
+        tl.to(recommended, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, '-=0.4');
         tl.to(sep, { scaleX: 1, duration: 0.5, ease: 'power3.out' }, '-=0.2');
 
-        // rows
         rowsEls.forEach((row, rIdx) => {
           const cells = row.querySelectorAll<HTMLElement>('.cmp-cell');
           tl.fromTo(
@@ -218,24 +205,41 @@ export function Comparison() {
             },
             rIdx === 0 ? '>' : '>-0.35'
           );
-          // check draw
           const checks = row.querySelectorAll<SVGPathElement>('.check-draw');
           checks.forEach((c) => {
             const len = c.getTotalLength ? c.getTotalLength() : 20;
             gsap.set(c, { strokeDasharray: len, strokeDashoffset: len });
             tl.to(c, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' }, '<');
           });
+          // Halo pulse for check marks
+          const halos = row.querySelectorAll<HTMLElement>('.check-halo');
+          halos.forEach((h) => {
+            tl.fromTo(
+              h,
+              { opacity: 0.6, scale: 1 },
+              { opacity: 0, scale: 2, duration: 0.6, ease: 'power2.out' },
+              '<+0.1'
+            );
+          });
         });
 
-        // final armor border pulse
         tl.fromTo(
           '.cmp-armor-border',
           { opacity: 1 },
           { opacity: 0.4, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' },
           '>-0.1'
         );
+
+        // fade in side annotations
+        tl.fromTo(
+          '.cmp-annotation',
+          { opacity: 0, x: -8 },
+          { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out' },
+          '-=0.4'
+        );
       },
     });
+
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, { scope: container });
 
@@ -244,7 +248,7 @@ export function Comparison() {
       <Container>
         <div className="max-w-3xl mb-14">
           <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-5">
-            The Comparison
+            {'// COMPETITIVE ANALYSIS //'} <span className="text-[var(--color-text-medium)]">THE GAP</span> {'// 06'}
           </div>
           <h2
             className="cmp-heading font-bold text-[var(--color-text-dark)] mb-5"
@@ -258,49 +262,95 @@ export function Comparison() {
         </div>
 
         {/* Desktop table */}
-        <div className="hidden lg:block cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 relative">
-          <div className="grid grid-cols-[1.2fr_1.1fr_1fr_1fr_1fr_1fr] gap-x-5 gap-y-0">
-            {/* header row */}
-            <div className="cmp-header" />
-            <div className="cmp-header cmp-header-armor relative">
-              <div className="cmp-armor-border absolute -top-8 left-0 right-0 h-[2px] bg-[var(--color-primary)] rounded" />
-              <div className="font-bold text-[17px] text-[var(--color-text-dark)] py-4">ArmorIQ</div>
-            </div>
-            {columns.slice(1).map((c) => (
-              <div key={c} className="cmp-header">
-                <div className="font-medium text-[15px] text-[var(--color-text-medium)] py-4">{c}</div>
-              </div>
-            ))}
+        <div className="hidden lg:block relative">
+          <div className="cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 relative overflow-hidden">
+            <div
+              className="grid gap-x-5 gap-y-0 relative"
+              style={{ gridTemplateColumns: '1.2fr 1.15fr 1fr 1fr 1fr 1fr' }}
+            >
+              {/* ArmorIQ column background gradient (spans all rows via absolute positioning) */}
+              <div
+                aria-hidden="true"
+                className="absolute top-0 bottom-0 pointer-events-none rounded-lg"
+                style={{
+                  left: 'calc((1.2fr / 6.35fr) * 100%)',
+                  gridColumn: '2 / 3',
+                  background:
+                    'linear-gradient(180deg, rgba(224,123,76,0.06), rgba(224,123,76,0.02))',
+                }}
+              />
 
-            {/* separator */}
-            <div className="cmp-sep col-span-6 h-[1px] bg-[var(--color-border)] mb-3" />
-
-            {/* rows */}
-            {rows.map((r, rIdx) => (
-              <div key={r.label} className="cmp-row contents">
-                <div className="cmp-cell py-4 pr-3 font-medium text-[14px] text-[var(--color-text-dark)] border-t border-[var(--color-border)]" style={{ opacity: 0 }}>
-                  {r.label}
+              {/* header row */}
+              <div className="cmp-header" />
+              <div className="cmp-header-armor relative py-4">
+                <div className="cmp-armor-border absolute -top-8 left-0 right-0 h-[3px] bg-[var(--color-primary)] rounded" />
+                <div
+                  className="cmp-recommended absolute -top-5 left-0 font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-primary)]"
+                >
+                  ◆ Recommended
                 </div>
-                {r.cells.map((cell, cIdx) => {
-                  const c = classifyCell(cell);
-                  const isArmor = cIdx === 0;
-                  return (
-                    <div
-                      key={cIdx}
-                      className={`cmp-cell py-4 pr-3 border-t ${isArmor ? 'border-[rgba(224,123,76,0.25)]' : 'border-[var(--color-border)]'}`}
-                      style={{ opacity: 0 }}
-                    >
-                      <CellRender cell={c} />
-                    </div>
-                  );
-                })}
-                <div className="contents" aria-hidden="true" key={`spacer-${rIdx}`} />
+                <div className="font-bold text-[18px] text-[var(--color-text-dark)]">ArmorIQ</div>
+                <div
+                  className="cmp-armor-scan absolute left-0 right-0 bottom-0 h-[1px]"
+                  style={{
+                    background:
+                      'linear-gradient(to right, transparent, var(--color-primary), transparent)',
+                  }}
+                  aria-hidden="true"
+                />
               </div>
-            ))}
+              {columns.slice(1).map((c) => (
+                <div key={c} className="cmp-header-comp">
+                  <div className="font-medium text-[15px] text-[var(--color-text-medium)] py-4">{c}</div>
+                </div>
+              ))}
+
+              <div className="cmp-sep col-span-6 h-[1px] bg-[var(--color-border)] mb-3" />
+
+              {rows.map((r, rIdx) => (
+                <div key={r.label} className="cmp-row contents">
+                  <div
+                    className="cmp-cell py-4 pr-3 font-medium text-[14px] text-[var(--color-text-dark)] border-t border-[var(--color-border)]"
+                    style={{ opacity: 0 }}
+                  >
+                    {r.label}
+                  </div>
+                  {r.cells.map((cell, cIdx) => {
+                    const c = classifyCell(cell);
+                    const isArmor = cIdx === 0;
+                    return (
+                      <div
+                        key={cIdx}
+                        className={`cmp-cell py-4 pr-3 border-t ${isArmor ? 'border-[rgba(224,123,76,0.25)]' : 'border-[var(--color-border)]'}`}
+                        style={{ opacity: 0 }}
+                      >
+                        <CellRender cell={c} />
+                      </div>
+                    );
+                  })}
+                  {/* spacer for contents */}
+                  <div className="contents" aria-hidden="true" key={`spacer-${rIdx}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Side annotations */}
+          <div className="absolute top-0 -right-4 xl:-right-12 w-44 pt-20 hidden xl:block">
+            {rows.map((r, i) => r.annotation ? (
+              <div
+                key={r.label}
+                className="cmp-annotation font-mono text-[10px] text-[var(--color-text-light)] leading-[1.4] flex items-start gap-2 mb-5"
+                style={{ opacity: 0, marginTop: i === 0 ? '0' : `${i * 48}px` }}
+              >
+                <span className="inline-block w-4 h-[1px] bg-[var(--color-text-light)] mt-1.5 flex-shrink-0" aria-hidden="true" />
+                <span>{r.annotation}</span>
+              </div>
+            ) : null)}
           </div>
         </div>
 
-        {/* Mobile: stacked cards per competitor */}
+        {/* Mobile cards */}
         <div className="lg:hidden space-y-6">
           {columns.slice(1).map((comp, compIdx) => (
             <div key={comp} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
@@ -332,7 +382,6 @@ export function Comparison() {
           ))}
         </div>
 
-        {/* Closing */}
         <div className="cmp-closing mt-20 md:mt-28 text-center">
           <p
             className="font-bold text-[var(--color-text-dark)] mx-auto max-w-4xl"
