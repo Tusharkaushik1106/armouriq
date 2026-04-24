@@ -1,8 +1,7 @@
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
-import { Hero } from '@/components/sections/Hero';
-import { HeroShowcase } from '@/components/sections/HeroShowcase';
+import { HeroHandoff } from '@/components/sections/HeroHandoff';
 import { TrustBar } from '@/components/sections/TrustBar';
 import { Problem } from '@/components/sections/Problem';
 import { HowItWorks } from '@/components/sections/HowItWorks';
@@ -19,8 +18,7 @@ export default function Page() {
       <AnnouncementBar />
       <Nav />
       <main>
-        <Hero />
-        <HeroShowcase />
+        <HeroHandoff />
         <TrustBar />
         <Problem />
         <MarqueeDivider text="INTENT · POLICY · AUDIT" />

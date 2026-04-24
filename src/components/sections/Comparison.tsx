@@ -136,6 +136,87 @@ export function Comparison() {
         },
       });
     }
+
+    // Pinned scrubbed drop — desktop only
+    if (showMobile) {
+      const cards = container.current.querySelectorAll<HTMLElement>('.cmp-mobile-card');
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.12,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: cards[0].parentElement,
+              start: 'top 80%',
+            },
+          }
+        );
+      }
+      return;
+    }
+
+    const pinRoot = container.current.querySelector<HTMLElement>('.cmp-pin-root');
+    if (!pinRoot) return;
+
+    // Pre-state
+    const compCols = pinRoot.querySelectorAll<HTMLElement>('.cmp-col-comp');
+    const armorCol = pinRoot.querySelector<HTMLElement>('.cmp-col-armor');
+    const interimLabel = pinRoot.querySelector<HTMLElement>('.cmp-interim');
+    const finalLabel = pinRoot.querySelector<HTMLElement>('.cmp-final');
+
+    gsap.set(compCols, { y: -200, opacity: 0 });
+    gsap.set(armorCol, { x: -200, opacity: 0 });
+    gsap.set([interimLabel, finalLabel], { opacity: 0, y: 12 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: pinRoot,
+        start: 'top top',
+        end: '+=180%',
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+      },
+    });
+
+    // 0-60%: competitor columns drop in sequentially
+    compCols.forEach((col, i) => {
+      tl.to(
+        col,
+        { y: 0, opacity: 1, duration: 0.2, ease: 'power3.in' },
+        i * 0.1
+      );
+      // tiny settle shake
+      tl.fromTo(
+        col,
+        { x: 0 },
+        { x: 0, duration: 0.05, ease: 'none' },
+        i * 0.1 + 0.2
+      );
+    });
+
+    // 60-70%: interim label appears
+    tl.to(interimLabel, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' }, 0.55);
+
+    // 70-90%: ArmorIQ slides in from left
+    tl.to(interimLabel, { opacity: 0, y: -10, duration: 0.1, ease: 'power2.in' }, 0.7);
+    tl.to(
+      armorCol,
+      { x: 0, opacity: 1, duration: 0.3, ease: 'power4.out' },
+      0.7
+    );
+
+    // 90-95%: pulse armor column
+    tl.to(armorCol, { scale: 1.04, duration: 0.1, ease: 'power2.out' }, 1.0);
+    tl.to(armorCol, { scale: 1, duration: 0.15, ease: 'power2.in' }, 1.1);
+
+    // 95-100%: final label fades in
+    tl.to(finalLabel, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' }, 1.15);
   }, { scope: container, dependencies: [isDesktop] });
 
   return (
@@ -155,43 +236,74 @@ export function Comparison() {
         </div>
 
         {!showMobile && (
-          <div className="cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8">
-            <div
-              className="grid gap-x-5 gap-y-0"
-              style={{ gridTemplateColumns: '1.2fr 1.1fr 1fr 1fr 1fr 1fr' }}
-            >
-              <div className="cmp-header" />
-              <div className="cmp-header-armor relative py-4">
-                <div className="absolute -top-8 left-0 right-0 h-[2px] bg-[var(--color-primary)] rounded" />
-                <div className="font-bold text-[18px] text-[var(--color-text-dark)]">ArmorIQ</div>
-              </div>
-              {columns.slice(1).map((c) => (
-                <div key={c} className="cmp-header">
-                  <div className="font-medium text-[15px] text-[var(--color-text-medium)] py-4">{c}</div>
+          <div className="cmp-pin-root relative min-h-screen flex items-center">
+            <div className="cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 w-full">
+              <div className="flex gap-5 items-stretch">
+                {/* Row labels column */}
+                <div className="w-[220px] flex-shrink-0 flex flex-col pt-[72px]">
+                  {rows.map((r) => (
+                    <div
+                      key={r.label}
+                      className="py-4 pr-3 font-medium text-[14px] text-[var(--color-text-dark)] border-t border-[var(--color-border)]"
+                    >
+                      {r.label}
+                    </div>
+                  ))}
                 </div>
-              ))}
 
-              <div className="col-span-6 h-[1px] bg-[var(--color-border)] mb-3" />
-
-              {rows.map((r, rIdx) => (
-                <div key={r.label} className="cmp-row contents">
-                  <div className="py-4 pr-3 font-medium text-[14px] text-[var(--color-text-dark)] border-t border-[var(--color-border)]">
-                    {r.label}
+                {/* ArmorIQ column */}
+                <div className="cmp-col-armor flex-1 min-w-0 relative origin-center" style={{ transform: 'scale(1.08)' }}>
+                  <div className="relative py-4 mb-0">
+                    <div className="absolute -top-8 left-0 right-0 h-[2px] bg-[var(--color-primary)] rounded" />
+                    <div className="font-bold text-[18px] text-[var(--color-text-dark)]">ArmorIQ</div>
                   </div>
-                  {r.cells.map((cell, cIdx) => {
-                    const c = classifyCell(cell);
+                  {rows.map((r) => {
+                    const c = classifyCell(r.cells[0]);
                     return (
                       <div
-                        key={cIdx}
+                        key={r.label}
                         className="py-4 pr-3 border-t border-[var(--color-border)]"
                       >
                         <CellRender cell={c} />
                       </div>
                     );
                   })}
-                  <div className="contents" aria-hidden="true" key={`spacer-${rIdx}`} />
                 </div>
-              ))}
+
+                {/* Competitor columns */}
+                {columns.slice(1).map((comp, compIdx) => (
+                  <div key={comp} className="cmp-col-comp flex-1 min-w-0">
+                    <div className="py-4 mb-0">
+                      <div className="font-medium text-[15px] text-[var(--color-text-medium)]">{comp}</div>
+                    </div>
+                    {rows.map((r) => {
+                      const c = classifyCell(r.cells[compIdx + 1]);
+                      return (
+                        <div
+                          key={r.label}
+                          className="py-4 pr-3 border-t border-[var(--color-border)]"
+                        >
+                          <CellRender cell={c} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+
+              {/* Interim + final labels, positioned absolutely over the table area */}
+              <div
+                className="cmp-interim absolute left-1/2 -translate-x-1/2 bottom-8 font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--color-text-light)] pointer-events-none"
+                aria-hidden="true"
+              >
+                4 tools. 0 prevent rogue actions.
+              </div>
+              <div
+                className="cmp-final absolute left-1/2 -translate-x-1/2 bottom-8 font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--color-primary)] pointer-events-none"
+                aria-hidden="true"
+              >
+                ArmorIQ. Prevention, not observation.
+              </div>
             </div>
           </div>
         )}
@@ -199,7 +311,7 @@ export function Comparison() {
         {showMobile && (
           <div className="space-y-6">
             {columns.slice(1).map((comp, compIdx) => (
-              <div key={comp} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
+              <div key={comp} className="cmp-mobile-card bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
                 <div className="flex items-center justify-between mb-5 pb-4 border-b border-[var(--color-border)]">
                   <div>
                     <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-1">Compared to</div>
