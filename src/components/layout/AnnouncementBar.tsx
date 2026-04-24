@@ -44,7 +44,7 @@ export function AnnouncementBar() {
       </span>
       <a
         href="#products"
-        className="hidden md:inline-flex items-center gap-1 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
+        className="hidden md:inline-flex items-center gap-1 text-white/90 hover:text-white transition-colors"
       >
         Explore ArmorClaw
         <span aria-hidden="true">→</span>

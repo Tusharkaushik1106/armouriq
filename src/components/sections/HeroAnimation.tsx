@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 
 const agents = ['support-agent-1', 'analyst-agent', 'billing-bot'];
 const targets = ['CRM', 'Database', 'Email API', 'Billing'];
@@ -50,7 +50,8 @@ export function HeroAnimation() {
       return;
     }
 
-    const tl = gsap.timeline({ delay: 3.6 });
+    // Build the entrance timeline but hold it paused until the section enters view
+    const tl = gsap.timeline({ paused: true });
     tl.to('.fw-label-top', { opacity: 1, duration: 0.4 })
       .to('.fw-line', { scaleY: 1, duration: 0.8, ease: 'power3.out' }, '-=0.1')
       .to('.fw-tick', { opacity: 1, stagger: 0.03, duration: 0.25 }, '-=0.4')
@@ -64,24 +65,32 @@ export function HeroAnimation() {
         { opacity: 1, scale: 1, stagger: 0.1, duration: 0.6, ease: 'power3.out' },
         '-=0.4'
       )
-      .to('.fw-counter', { opacity: 1, duration: 0.5 }, '-=0.2');
-
-    // Scanner
-    gsap.to('.fw-scanner', {
-      opacity: 0.5,
-      duration: 0.5,
-      delay: 4.3,
-      onComplete: () => {
-        const col = root.querySelector<HTMLElement>('.fw-firewall-col');
-        const h = col ? col.clientHeight - 20 : 220;
+      .to('.fw-counter', { opacity: 1, duration: 0.5 }, '-=0.2')
+      .call(() => {
+        // Start scanner & packet loop after entrance completes
         gsap.to('.fw-scanner', {
-          y: h,
-          duration: 3,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
+          opacity: 0.5,
+          duration: 0.5,
+          onComplete: () => {
+            const col = root.querySelector<HTMLElement>('.fw-firewall-col');
+            const h = col ? col.clientHeight - 20 : 220;
+            gsap.to('.fw-scanner', {
+              y: h,
+              duration: 3,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+            });
+          },
         });
-      },
+        startPacketLoop();
+      });
+
+    ScrollTrigger.create({
+      trigger: root,
+      start: 'top 75%',
+      once: true,
+      onEnter: () => tl.play(),
     });
 
     // Pulsing dots on agent tiles — single, desynced
@@ -230,10 +239,11 @@ export function HeroAnimation() {
         scheduleNext();
       });
     };
-    gsap.delayedCall(4.8, () => {
+
+    function startPacketLoop() {
       emitPacket();
       scheduleNext();
-    });
+    }
   }, { scope: container });
 
   return (

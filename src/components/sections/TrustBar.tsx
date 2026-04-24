@@ -36,7 +36,7 @@ export function TrustBar() {
   return (
     <section
       ref={ref}
-      className="py-16 md:py-20 border-y border-[var(--color-border)] bg-white"
+      className="py-24 md:py-32 border-y border-[var(--color-border)] bg-white"
     >
       <Container>
         <p className="text-center text-[13px] font-mono uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-10">

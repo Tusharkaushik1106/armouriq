@@ -63,7 +63,7 @@ function StepIllustration({ n }: { n: number }) {
     <div className="mt-8 max-w-md bg-[var(--color-text-dark)] rounded-lg p-5 font-mono text-[11px] leading-[1.8]">
       <div className="text-[rgba(255,255,255,0.5)]">[14:32:08] agent=support-1 action=READ.customers verdict=ALLOW</div>
       <div className="text-[rgba(255,255,255,0.5)]">[14:32:09] agent=analyst action=QUERY.stats verdict=ALLOW</div>
-      <div className="text-[var(--color-primary)]">[14:32:11] agent=billing-bot action=WRITE.audit verdict=BLOCK</div>
+      <div className="text-[var(--color-danger)]">[14:32:11] agent=billing-bot action=WRITE.audit verdict=BLOCK</div>
       <div className="text-[rgba(255,255,255,0.5)]">[14:32:12] sig=sha256:a3f9…</div>
     </div>
   );
@@ -185,7 +185,7 @@ export function HowItWorks() {
                 <Container className="w-full">
                   <div className="panel-content grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-10 lg:gap-16 md:items-center">
                     <div className="relative md:pl-6">
-                      <div className="hidden md:block absolute left-0 top-6 bottom-6 w-[3px] bg-[var(--color-primary)] rounded-full" />
+                      <div className="hidden md:block absolute left-0 top-6 bottom-6 w-[2px] bg-[var(--color-border-strong)] rounded-full" />
                       <div
                         className="font-bold leading-none text-[var(--color-text-light)]"
                         style={{

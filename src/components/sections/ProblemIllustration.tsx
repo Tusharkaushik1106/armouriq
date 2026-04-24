@@ -154,13 +154,13 @@ export function ProblemIllustration() {
                 <path
                   className="pi-draw"
                   d="M135 95 L142 100 L135 105"
-                  stroke="var(--color-primary)"
+                  stroke="var(--color-text-dark)"
                   strokeWidth="1.25"
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <text x="100" y="88" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="8" fontFamily="var(--font-mono)" fill="var(--color-primary)" letterSpacing="0.06em">intended: READ.customers</text>
+                <text x="100" y="88" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="8" fontFamily="var(--font-mono)" fill="var(--color-text-medium)" letterSpacing="0.06em">intended: READ.customers</text>
                 <text x="100" y="116" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="7" fontFamily="var(--font-mono)" fill="var(--color-text-light)" letterSpacing="0.08em">[t=0.42s]</text>
 
                 {/* Database cylinder */}
