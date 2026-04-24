@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# assignment brief (internal, not committed)
+armoriq-assignment-frontend.docx
+everything.md
