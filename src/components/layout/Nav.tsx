@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Button } from '@/components/ui/Button';
 import { MobileDrawer } from './MobileDrawer';
+import { useMediaQuery } from '@/lib/useMediaQuery';
 
 const links = [
   { label: 'Platform', href: '#products' },
@@ -15,6 +16,10 @@ export function Nav() {
   const ref = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const isLgUp = useMediaQuery('(min-width: 1024px)');
+  // Mount the drawer only when below lg, or when it has been opened at least once.
+  const [drawerWasOpened, setDrawerWasOpened] = useState(false);
+  const shouldMountDrawer = isLgUp === false || drawerWasOpened;
 
   useGSAP(() => {
     if (!ref.current) return;
@@ -103,7 +108,10 @@ export function Nav() {
               className="lg:hidden p-2 text-[var(--color-text-dark)]"
               aria-label="Open menu"
               aria-expanded={drawerOpen}
-              onClick={() => setDrawerOpen(true)}
+              onClick={() => {
+                setDrawerWasOpened(true);
+                setDrawerOpen(true);
+              }}
             >
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
                 <path d="M3 6H19M3 11H19M3 16H19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -112,7 +120,9 @@ export function Nav() {
           </div>
         </div>
       </header>
-      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} links={links} />
+      {shouldMountDrawer && (
+        <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} links={links} />
+      )}
     </>
   );
 }

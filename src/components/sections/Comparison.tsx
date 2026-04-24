@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
 import { SplitText } from '@/components/ui/SplitText';
+import { useMediaQuery } from '@/lib/useMediaQuery';
 
 type Cell = { text: string; type: 'yes' | 'no' | 'dash' | 'text' };
 
@@ -88,6 +89,9 @@ function CellRender({ cell }: { cell: Cell }) {
 
 export function Comparison() {
   const container = useRef<HTMLElement>(null);
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  // default-desktop during SSR; swaps to mobile cards after hydration below lg
+  const showMobile = isDesktop === false;
 
   useGSAP(() => {
     if (!container.current) return;
@@ -262,7 +266,8 @@ export function Comparison() {
         </div>
 
         {/* Desktop table */}
-        <div className="hidden lg:block relative">
+        {!showMobile && (
+        <div className="relative">
           <div className="cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 relative overflow-hidden">
             <div
               className="grid gap-x-5 gap-y-0 relative"
@@ -349,9 +354,11 @@ export function Comparison() {
             ) : null)}
           </div>
         </div>
+        )}
 
         {/* Mobile cards */}
-        <div className="lg:hidden space-y-6">
+        {showMobile && (
+        <div className="space-y-6">
           {columns.slice(1).map((comp, compIdx) => (
             <div key={comp} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
               <div className="flex items-center justify-between mb-5 pb-4 border-b border-[var(--color-border)]">
@@ -381,6 +388,7 @@ export function Comparison() {
             </div>
           ))}
         </div>
+        )}
 
         <div className="cmp-closing mt-20 md:mt-28 text-center">
           <p
