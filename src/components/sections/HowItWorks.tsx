@@ -2,7 +2,6 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
-import { SplitText } from '@/components/ui/SplitText';
 
 const steps = [
   {
@@ -25,18 +24,27 @@ const steps = [
 function StepIllustration({ n }: { n: number }) {
   if (n === 0) {
     return (
-      <div className="mt-8 grid grid-cols-1 gap-2 max-w-md">
+      <div className="step-illu step-illu-1 mt-8 grid grid-cols-1 gap-2 max-w-md">
         {['support-agent-1', 'analyst-agent', 'billing-bot', 'docs-agent'].map((a, i) => (
           <div
             key={a}
-            className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-lg px-4 py-3 card-shadow"
-            style={{ opacity: 0.85, transform: `translateX(${i * 4}px)` }}
+            className="s1-row relative flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-lg px-4 py-3 card-shadow overflow-hidden"
+            style={{ opacity: 0, transform: `translateX(40px)`, willChange: 'transform, opacity' }}
+            data-i={i}
           >
-            <span className="w-2 h-2 rounded-full bg-[var(--color-success)]" />
+            <span className="s1-dot w-2 h-2 rounded-full bg-[var(--color-success)]" />
             <span className="font-mono text-xs text-[var(--color-text-medium)]">{a}</span>
             <span className="ml-auto font-mono text-[10px] text-[var(--color-text-light)] uppercase tracking-[0.1em]">
               registered
             </span>
+            <span className="s1-scan absolute inset-y-0 left-0 w-1/3 pointer-events-none"
+              style={{
+                background: 'linear-gradient(90deg, transparent, rgba(216,98,46,0.12), transparent)',
+                transform: 'translateX(-100%)',
+                willChange: 'transform',
+              }}
+              aria-hidden="true"
+            />
           </div>
         ))}
       </div>
@@ -44,27 +52,33 @@ function StepIllustration({ n }: { n: number }) {
   }
   if (n === 1) {
     return (
-      <div className="mt-8 max-w-md bg-white border border-[var(--color-border)] rounded-lg p-5 card-shadow">
+      <div
+        className="step-illu step-illu-2 mt-8 max-w-md bg-white border border-[var(--color-border)] rounded-lg p-5 card-shadow"
+        style={{ opacity: 0, transform: 'translateY(20px) scale(0.97)', willChange: 'transform, opacity' }}
+      >
         <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-3">
           Intent Check
         </div>
         <div className="flex items-center gap-3 text-[12px] font-mono">
-          <span className="px-2 py-1 rounded bg-[var(--color-surface)] border border-[var(--color-border)]">DELETE /users/42</span>
-          <span className="text-[var(--color-text-light)]">→</span>
-          <span className="px-2 py-1 rounded bg-[var(--color-danger-bg)] border border-[rgba(198,61,61,0.3)] text-[var(--color-danger)]">BLOCKED</span>
+          <span className="s2-input px-2 py-1 rounded bg-[var(--color-surface)] border border-[var(--color-border)]" style={{ opacity: 0 }}>DELETE /users/42</span>
+          <span className="s2-arrow text-[var(--color-text-light)]" style={{ opacity: 0 }}>→</span>
+          <span className="s2-blocked px-2 py-1 rounded bg-[var(--color-danger-bg)] border border-[rgba(198,61,61,0.3)] text-[var(--color-danger)]" style={{ opacity: 0, transform: 'scale(0.6)' }}>BLOCKED</span>
         </div>
-        <div className="mt-3 text-[11px] text-[var(--color-text-light)] font-mono">
+        <div className="s2-reason mt-3 text-[11px] text-[var(--color-text-light)] font-mono" style={{ opacity: 0 }}>
           Reason: exceeds delegated scope
         </div>
       </div>
     );
   }
   return (
-    <div className="mt-8 max-w-md bg-[var(--color-text-dark)] rounded-lg p-5 font-mono text-[11px] leading-[1.8]">
-      <div className="text-[rgba(255,255,255,0.5)]">[14:32:08] agent=support-1 action=READ.customers verdict=ALLOW</div>
-      <div className="text-[rgba(255,255,255,0.5)]">[14:32:09] agent=analyst action=QUERY.stats verdict=ALLOW</div>
-      <div className="text-[var(--color-danger)]">[14:32:11] agent=billing-bot action=WRITE.audit verdict=BLOCK</div>
-      <div className="text-[rgba(255,255,255,0.5)]">[14:32:12] sig=sha256:a3f9…</div>
+    <div
+      className="step-illu step-illu-3 mt-8 max-w-md bg-[var(--color-text-dark)] rounded-lg p-5 font-mono text-[11px] leading-[1.8] overflow-hidden"
+      style={{ opacity: 0, transform: 'translateY(20px)', willChange: 'transform, opacity' }}
+    >
+      <div className="s3-line text-[rgba(255,255,255,0.85)]" style={{ opacity: 0 }}>[14:32:08] agent=support-1 action=READ.customers verdict=ALLOW</div>
+      <div className="s3-line text-[rgba(255,255,255,0.85)]" style={{ opacity: 0 }}>[14:32:09] agent=analyst action=QUERY.stats verdict=ALLOW</div>
+      <div className="s3-line s3-block text-[#FF7A7A]" style={{ opacity: 0 }}>[14:32:11] agent=billing-bot action=WRITE.audit verdict=BLOCK</div>
+      <div className="s3-line text-[rgba(255,255,255,0.85)]" style={{ opacity: 0 }}>[14:32:12] sig=sha256:a3f9…</div>
     </div>
   );
 }
@@ -76,51 +90,104 @@ export function HowItWorks() {
     if (!container.current) return;
     const mm = gsap.matchMedia();
 
-    // Closing line — universal
-    const closing = container.current.querySelector('.hiw-closing');
-    if (closing) {
-      gsap.set(closing.querySelectorAll('.split-inner'), { y: '100%' });
-      ScrollTrigger.create({
-        trigger: closing,
-        start: 'top 75%',
-        once: true,
-        onEnter: () => {
-          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (reduced) {
-            gsap.set(closing.querySelectorAll('.split-inner'), { y: 0 });
-            gsap.set('.hiw-closing-underline', { scaleX: 1 });
-            return;
-          }
-          gsap.to(closing.querySelectorAll('.split-inner'), {
-            y: 0,
-            stagger: 0.015,
-            duration: 0.8,
-            ease: 'power3.out',
+    const playStepAnimation = (panel: HTMLElement) => {
+      // Step 1
+      const rows = panel.querySelectorAll<HTMLElement>('.s1-row');
+      if (rows.length) {
+        gsap.to(rows, {
+          opacity: 1,
+          x: (i) => i * 6,
+          stagger: 0.12,
+          duration: 0.65,
+          ease: 'power3.out',
+        });
+        // continuous scan sweep
+        rows.forEach((row, i) => {
+          const scan = row.querySelector<HTMLElement>('.s1-scan');
+          if (!scan) return;
+          gsap.to(scan, {
+            x: '350%',
+            duration: 1.6,
+            ease: 'sine.inOut',
+            repeat: -1,
+            repeatDelay: 2.4,
+            delay: 0.8 + i * 0.25,
           });
-          gsap.fromTo(
-            '.hiw-closing-underline',
-            { scaleX: 0 },
-            { scaleX: 1, duration: 0.6, ease: 'power3.out', delay: 0.8 }
-          );
-        },
-      });
-    }
+        });
+      }
 
-    // Desktop only: pinned horizontal
+      // Step 2
+      const card2 = panel.querySelector<HTMLElement>('.step-illu-2');
+      if (card2) {
+        const tl = gsap.timeline();
+        tl.to(card2, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' })
+          .to(card2.querySelector('.s2-input'), { opacity: 1, duration: 0.3, ease: 'power2.out' }, '-=0.2')
+          .to(card2.querySelector('.s2-arrow'), { opacity: 1, duration: 0.25, ease: 'power2.out' })
+          .to(card2.querySelector('.s2-blocked'), { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' })
+          .to(card2.querySelector('.s2-blocked'), {
+            keyframes: [
+              { x: -3, duration: 0.05 },
+              { x: 3, duration: 0.05 },
+              { x: 0, duration: 0.05 },
+            ],
+          })
+          .to(card2.querySelector('.s2-reason'), { opacity: 1, duration: 0.3 }, '-=0.05');
+        // pulse the BLOCKED pill continuously
+        gsap.to(card2.querySelector('.s2-blocked'), {
+          boxShadow: '0 0 0 6px rgba(198,61,61,0.0)',
+          duration: 1.4,
+          ease: 'sine.out',
+          repeat: -1,
+          delay: 1.6,
+          startAt: { boxShadow: '0 0 0 0 rgba(198,61,61,0.35)' },
+        });
+      }
+
+      // Step 3
+      const card3 = panel.querySelector<HTMLElement>('.step-illu-3');
+      if (card3) {
+        const lines = card3.querySelectorAll<HTMLElement>('.s3-line');
+        const tl = gsap.timeline();
+        tl.to(card3, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
+        lines.forEach((line) => {
+          tl.fromTo(
+            line,
+            { opacity: 0, x: -8 },
+            { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' },
+            '+=0.05'
+          );
+        });
+        // flash the BLOCK line
+        const blockLine = card3.querySelector<HTMLElement>('.s3-block');
+        if (blockLine) {
+          gsap.to(blockLine, {
+            opacity: 0.55,
+            duration: 0.7,
+            ease: 'sine.inOut',
+            repeat: -1,
+            yoyo: true,
+            delay: 1.5,
+          });
+        }
+      }
+    };
+
+
+// Desktop only: pinned horizontal
     mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
       const track = container.current!.querySelector<HTMLDivElement>('.track');
       const panels = gsap.utils.toArray<HTMLElement>('.panel', container.current!);
       if (!track || panels.length === 0) return;
 
-      const totalScroll = (panels.length - 1) * window.innerWidth;
+      const getTotalScroll = () => Math.max(0, track.scrollWidth - window.innerWidth);
 
       const horizontalTween = gsap.to(track, {
-        x: -totalScroll,
+        x: () => -getTotalScroll(),
         ease: 'none',
         scrollTrigger: {
           trigger: container.current,
           start: 'top top',
-          end: () => `+=${totalScroll}`,
+          end: () => `+=${getTotalScroll()}`,
           pin: '.pin-wrap',
           scrub: 1,
           anticipatePin: 1,
@@ -146,6 +213,15 @@ export function HowItWorks() {
             },
           }
         );
+
+        // Panel-specific illustration intro — fires when panel center crosses viewport center
+        ScrollTrigger.create({
+          trigger: panel,
+          containerAnimation: horizontalTween,
+          start: 'left 60%',
+          once: true,
+          onEnter: () => playStepAnimation(panel),
+        });
       });
     });
 
@@ -165,6 +241,12 @@ export function HowItWorks() {
             scrollTrigger: { trigger: p, start: 'top 70%' },
           }
         );
+        ScrollTrigger.create({
+          trigger: p,
+          start: 'top 65%',
+          once: true,
+          onEnter: () => playStepAnimation(p),
+        });
       });
     });
 
@@ -179,7 +261,7 @@ export function HowItWorks() {
           {steps.map((s, i) => (
             <div
               key={s.num}
-              className="panel flex-shrink-0 w-full md:w-screen md:h-full py-20 md:py-0"
+              className="panel flex-shrink-0 w-full md:w-screen md:h-full py-14 md:py-0 border-t md:border-t-0 border-[var(--color-border)] first:border-t-0"
             >
               <div className="md:h-full flex md:items-center">
                 <Container className="w-full">
@@ -189,7 +271,7 @@ export function HowItWorks() {
                       <div
                         className="font-bold leading-none text-[var(--color-text-light)]"
                         style={{
-                          fontSize: 'clamp(100px, 20vw, 260px)',
+                          fontSize: 'clamp(72px, 20vw, 260px)',
                           letterSpacing: '-0.04em',
                         }}
                       >
@@ -223,35 +305,6 @@ export function HowItWorks() {
         </div>
       </div>
 
-      {/* Closing line */}
-      <div className="hiw-closing py-24 md:py-32 bg-[var(--color-bg)] text-center">
-        <Container>
-          <p
-            className="font-bold text-[var(--color-text-dark)] mx-auto max-w-4xl"
-            style={{
-              fontSize: 'clamp(28px, 4vw, 48px)',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.15,
-            }}
-          >
-            <SplitText splitBy="char">IAM controls access. </SplitText>
-            <span className="relative inline-block">
-              <SplitText splitBy="char">ArmorIQ controls behavior.</SplitText>
-              <span
-                aria-hidden="true"
-                className="hiw-closing-underline absolute left-0 right-0"
-                style={{
-                  bottom: '0.04em',
-                  height: '0.06em',
-                  background: 'var(--color-primary)',
-                  transform: 'scaleX(0)',
-                  transformOrigin: 'left',
-                }}
-              />
-            </span>
-          </p>
-        </Container>
-      </div>
     </section>
   );
 }

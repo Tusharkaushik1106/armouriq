@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Button } from '@/components/ui/Button';
+import { QDiscButton } from '@/components/ui/QDiscButton';
 
 type Link = { label: string; href: string };
 
@@ -101,9 +102,7 @@ export function MobileDrawer({
           ))}
         </nav>
         <div className="p-6 flex flex-col gap-3">
-          <Button as="a" href="#cta" variant="primary" className="drawer-item w-full">
-            Book a Demo
-          </Button>
+          <div className="drawer-item w-full"><QDiscButton href="#cta" className="w-full justify-center">Book a Demo</QDiscButton></div>
           <a
             href="#"
             className="drawer-item text-center py-3 text-sm text-[var(--color-text-medium)] underline-slide"

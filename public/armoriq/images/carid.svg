@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" fill="currentColor">
+  <rect x="0" y="0" width="40" height="40" rx="6" fill="currentColor"/>
+  <text x="9" y="32" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="bold" fill="white" letter-spacing="-1">iD</text>
+  <text x="46" y="30" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" letter-spacing="-0.5">carID</text>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(0, 0, 0)",
+  "border": "1px solid rgba(0, 0, 0, 0)",
+  "borderRadius": "100px",
+  "transform": "matrix(1.08, 0, 0, 1.08, 0, 0)",
+  "width": "131.172px",
+  "height": "36px",
+  "padding": "8px 16px"
+}

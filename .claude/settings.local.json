@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm i *)",
+      "Bash(npx playwright *)",
+      "Bash(node .pw/qclay/scan-home.mjs)",
+      "Bash(node .pw/qclay/scan-stack.mjs)",
+      "Bash(node .pw/qclay/scan-ctas.mjs)",
+      "Bash(node .pw/qclay/scan-scroll.mjs)",
+      "Bash(node .pw/qclay/scan-transition.mjs)",
+      "Bash(node .pw/qclay/scan-wheel.mjs)",
+      "Bash(node .pw/qclay/scan-wheel2.mjs)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(break)",
+      "Bash(curl *)",
+      "Bash(node .pw/verify-cta.mjs)",
+      "Bash(pkill -f \"next dev\")",
+      "PowerShell(try { \\(Invoke-WebRequest http://localhost:3003 -UseBasicParsing -TimeoutSec 5\\).StatusCode } catch { $_.Exception.Message })",
+      "PowerShell($r3000 = try { \\(Invoke-WebRequest http://localhost:3000 -UseBasicParsing -TimeoutSec 10\\).StatusCode } catch { \"err\" }; $r3001 = try { \\(Invoke-WebRequest http://localhost:3001 -UseBasicParsing -TimeoutSec 10\\).StatusCode } catch { \"err\" }; $r3002 = try { \\(Invoke-WebRequest http://localhost:3002 -UseBasicParsing -TimeoutSec 10\\).StatusCode } catch { \"err\" }; $r3003 = try { \\(Invoke-WebRequest http://localhost:3003 -UseBasicParsing -TimeoutSec 15\\).StatusCode } catch { \"err\" }; \"3000=$r3000 3001=$r3001 3002=$r3002 3003=$r3003\")",
+      "Bash(node .pw/scan-home-ours.mjs)",
+      "Bash(node *)",
+      "WebFetch(domain:armoriq.ai)",
+      "Bash(python *)"
+    ]
+  }
+}

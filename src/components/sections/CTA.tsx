@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
+import { QDiscButton } from '@/components/ui/QDiscButton';
 import { SplitText } from '@/components/ui/SplitText';
 
 export function CTA() {
@@ -72,8 +73,8 @@ export function CTA() {
     >
       <Container className="relative text-center">
         <h2
-          className="cta-heading font-bold text-[var(--color-text-dark)] mx-auto max-w-[1400px] mb-10"
-          style={{ fontSize: 'clamp(56px, 12vw, 200px)', letterSpacing: '-0.04em', lineHeight: 0.95 }}
+          className="cta-heading font-bold text-[var(--color-text-dark)] mx-auto max-w-[1100px] mb-10"
+          style={{ fontSize: 'clamp(34px, 8.5vw, 144px)', letterSpacing: '-0.04em', lineHeight: 1 }}
         >
           <SplitText splitBy="char">Ready to </SplitText>
           <span className="relative inline-block">
@@ -93,16 +94,14 @@ export function CTA() {
           <SplitText splitBy="char"> what your AI agents actually do?</SplitText>
         </h2>
         <p
-          className="cta-sub text-[22px] md:text-[24px] font-light leading-[1.45] text-[var(--color-text-medium)] max-w-[48ch] mx-auto mb-14"
+          className="cta-sub text-[20px] md:text-[22px] font-light leading-[1.5] text-[var(--color-text-medium)] max-w-[52ch] mx-auto mb-14"
           style={{ opacity: 0 }}
         >
           Join the teams building safer, compliant AI agent deployments.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <div className="cta-btn" style={{ opacity: 0 }}>
-            <Button as="a" href="#" variant="primary" magnetic>
-              Book a Demo
-            </Button>
+            <QDiscButton href="#">Book a Demo</QDiscButton>
           </div>
           <div className="cta-btn" style={{ opacity: 0 }}>
             <Button as="a" href="#" variant="ghost">

@@ -1,0 +1,62 @@
+[
+  {
+    "text": "About Us\nAbout Us",
+    "tag": "A",
+    "classes": "animate-link",
+    "fontSize": "46px",
+    "fontFamily": "\"Plus Jakarta Sans\", serif",
+    "fontWeight": "400",
+    "color": "rgb(0, 0, 0)",
+    "letterSpacing": "normal",
+    "lineHeight": "normal",
+    "transform": "none"
+  },
+  {
+    "text": "What We Do\nWhat We Do",
+    "tag": "A",
+    "classes": "animate-link",
+    "fontSize": "46px",
+    "fontFamily": "\"Plus Jakarta Sans\", serif",
+    "fontWeight": "400",
+    "color": "rgb(0, 0, 0)",
+    "letterSpacing": "normal",
+    "lineHeight": "normal",
+    "transform": "none"
+  },
+  {
+    "text": "Our Works\nOur Works",
+    "tag": "A",
+    "classes": "animate-link",
+    "fontSize": "46px",
+    "fontFamily": "\"Plus Jakarta Sans\", serif",
+    "fontWeight": "400",
+    "color": "rgb(0, 0, 0)",
+    "letterSpacing": "normal",
+    "lineHeight": "normal",
+    "transform": "matrix(1, 0, 0, 1, -0.0409266, -0.0935479)"
+  },
+  {
+    "text": "Contact Us\nContact Us",
+    "tag": "A",
+    "classes": "animate-link",
+    "fontSize": "46px",
+    "fontFamily": "\"Plus Jakarta Sans\", serif",
+    "fontWeight": "400",
+    "color": "rgb(0, 0, 0)",
+    "letterSpacing": "normal",
+    "lineHeight": "normal",
+    "transform": "none"
+  },
+  {
+    "text": "Our Capabilities Deck",
+    "tag": "A",
+    "classes": "",
+    "fontSize": "17px",
+    "fontFamily": "\"Plus Jakarta Sans\", serif",
+    "fontWeight": "400",
+    "color": "rgb(0, 0, 0)",
+    "letterSpacing": "-0.51px",
+    "lineHeight": "normal",
+    "transform": "none"
+  }
+]

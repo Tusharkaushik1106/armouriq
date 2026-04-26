@@ -1,0 +1,422 @@
+[
+  {
+    "tag": "DIV",
+    "classes": "text -show-menu",
+    "text": "HomeHomeHomeAboutAboutAboutWorksWorksWor",
+    "transform": "matrix(1, 0, 0, 1, -257.5, 0)",
+    "transition": "opacity 0.3s",
+    "rect": {
+      "x": 462.5,
+      "y": 58,
+      "w": 515,
+      "h": 24
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Home",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 12)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 460.83685302734375,
+      "y": 89.37442016601562,
+      "w": 58.7012939453125,
+      "h": 33.25115966796875
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -27.6875, -12)",
+    "transition": "all",
+    "rect": {
+      "x": 462.5,
+      "y": 58,
+      "w": 55.375,
+      "h": 24
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "About",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 12)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 599.01171875,
+      "y": 89.34050750732422,
+      "w": 59.0859375,
+      "h": 33.31898498535156
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -27.8828, -12)",
+    "transition": "all",
+    "rect": {
+      "x": 600.6640625,
+      "y": 58,
+      "w": 55.765625,
+      "h": 24
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Works",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 12)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 737.567138671875,
+      "y": 89.24282836914062,
+      "w": 60.19384765625,
+      "h": 33.51434326171875
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -28.4453, -12)",
+    "transition": "all",
+    "rect": {
+      "x": 739.2109375,
+      "y": 58,
+      "w": 56.890625,
+      "h": 24
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Contact us",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 12)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 877.5714111328125,
+      "y": 85.62199401855469,
+      "w": 101.263427734375,
+      "h": 40.756011962890625
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -49.2969, -12)",
+    "transition": "all",
+    "rect": {
+      "x": 878.90625,
+      "y": 58,
+      "w": 98.59375,
+      "h": 24
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "DIV",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(2, 0, 0, 2, -55.6016, -40)",
+    "transition": "all",
+    "rect": {
+      "x": 1096.1875,
+      "y": -10,
+      "w": 222.40625,
+      "h": 160
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "burger-text active",
+    "text": "Closemenu",
+    "transform": "matrix(1, 0, 0, 1, 0, 24)",
+    "transition": "color 0.3s, transform 0.3s, -webkit-transform 0.3s",
+    "rect": {
+      "x": 1290,
+      "y": 49,
+      "w": 48.765625,
+      "h": 90
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -46.5, -46.5)",
+    "transition": "all",
+    "rect": {
+      "x": 1317.765625,
+      "y": 23.5,
+      "w": 93,
+      "h": 93
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Dribbble",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 10.5)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 48.756256103515625,
+      "y": 358.0351257324219,
+      "w": 78.78436279296875,
+      "h": 33.929779052734375
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -38.1484, -10.5)",
+    "transition": "all",
+    "rect": {
+      "x": 49.9921875,
+      "y": 333,
+      "w": 76.296875,
+      "h": 21
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Behance",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 10.5)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 48.756256103515625,
+      "y": 399.0351257324219,
+      "w": 78.78436279296875,
+      "h": 33.929779052734375
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -38.1484, -10.5)",
+    "transition": "all",
+    "rect": {
+      "x": 49.9921875,
+      "y": 374,
+      "w": 76.296875,
+      "h": 21
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "TikTok",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 10.5)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 48.756256103515625,
+      "y": 440.0351257324219,
+      "w": 78.78436279296875,
+      "h": 33.929779052734375
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -38.1484, -10.5)",
+    "transition": "all",
+    "rect": {
+      "x": 49.9921875,
+      "y": 415,
+      "w": 76.296875,
+      "h": 21
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Instagram",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 10.5)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 48.756256103515625,
+      "y": 481.0351257324219,
+      "w": 78.78436279296875,
+      "h": 33.929779052734375
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -38.1484, -10.5)",
+    "transition": "all",
+    "rect": {
+      "x": 49.9921875,
+      "y": 456,
+      "w": 76.296875,
+      "h": 21
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Linkedln",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 10.5)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 48.756256103515625,
+      "y": 522.0350952148438,
+      "w": 78.78436279296875,
+      "h": 33.9298095703125
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -38.1484, -10.5)",
+    "transition": "all",
+    "rect": {
+      "x": 49.9921875,
+      "y": 497,
+      "w": 76.296875,
+      "h": 21
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "About Us",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, -87)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 857.0745849609375,
+      "y": 171.60317993164062,
+      "w": 205.509765625,
+      "h": 91.57986450195312
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "About Us",
+    "transform": "matrix(1, 0, 0, 1, 0, -58)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 860.6029052734375,
+      "y": 275.3930969238281,
+      "w": 198.453125,
+      "h": 58.000030517578125
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -99.2266, -29)",
+    "transition": "all",
+    "rect": {
+      "x": 860.5950927734375,
+      "y": 275.3930969238281,
+      "w": 198.453125,
+      "h": 58.000030517578125
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "What We Do",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 29)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 858.2888793945312,
+      "y": 419.7626037597656,
+      "w": 272.96917724609375,
+      "h": 103.47476196289062
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -133.477, -29)",
+    "transition": "all",
+    "rect": {
+      "x": 861.2890625,
+      "y": 355.5,
+      "w": 266.953125,
+      "h": 58
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Our Works",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 29)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 857.9918212890625,
+      "y": 503.15826416015625,
+      "w": 234.453857421875,
+      "h": 96.6834716796875
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "hover",
+    "text": "",
+    "transform": "matrix(1, 0, 0, 1, -113.922, -29)",
+    "transition": "all",
+    "rect": {
+      "x": 861.296875,
+      "y": 435.5,
+      "w": 227.84375,
+      "h": 58
+    },
+    "color": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "SPAN",
+    "classes": "",
+    "text": "Contact Us",
+    "transform": "matrix(0.984808, -0.173648, 0.173648, 0.984808, 0, 29)",
+    "transition": "transform 0.5s, -webkit-transform 0.5s",
+    "rect": {
+      "x": 858.1187133789062,
+      "y": 581.7080078125,
+      "w": 250.90325927734375,
+      "h": 99.583984375
+    },
+    "color": "rgb(0, 0, 0)"
+  }
+]

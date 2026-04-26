@@ -99,6 +99,136 @@ export function ProblemIllustration() {
       '+=0.1'
     );
 
+    // ─── Continuous ambient loops ──────────────────────────────────────
+
+    // Pulsing dot indicators on both agents
+    ref.current.querySelectorAll<SVGCircleElement>('.pi-agent-dot').forEach((dot, i) => {
+      gsap.to(dot, {
+        opacity: 0.3,
+        r: 2.5,
+        duration: 1.2 + i * 0.3,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+    });
+
+    // Packet tokens flying along the intended arrow (left side, repeating)
+    const leftArrow = ref.current.querySelector<SVGPathElement>('.pi-arrow-path-left');
+    if (leftArrow) {
+      const total = leftArrow.getTotalLength();
+      ref.current.querySelectorAll<SVGCircleElement>('.pi-packet-left').forEach((p, i) => {
+        const dummy = { t: 0 };
+        gsap.to(dummy, {
+          t: 1,
+          duration: 2.2,
+          delay: i * 0.7,
+          repeat: -1,
+          ease: 'none',
+          onUpdate: () => {
+            const u = dummy.t;
+            const pt = leftArrow.getPointAtLength(u * total);
+            p.setAttribute('cx', String(pt.x));
+            p.setAttribute('cy', String(pt.y));
+            p.setAttribute('opacity', String(u < 0.04 || u > 0.96 ? 0 : 0.9));
+          },
+        });
+      });
+    }
+
+    // Right side: blocked packet that crashes into the firewall on a loop
+    const rightCrashPath = ref.current.querySelector<SVGPathElement>('.pi-arrow-path-right');
+    const blockedPkt = ref.current.querySelector<SVGCircleElement>('.pi-packet-right');
+    if (rightCrashPath && blockedPkt) {
+      const len = rightCrashPath.getTotalLength();
+      const dummy = { t: 0 };
+      const loop = gsap.timeline({ repeat: -1, repeatDelay: 1.4 });
+      loop.set(blockedPkt, { opacity: 0 });
+      loop.set(dummy, { t: 0 });
+      loop.to(dummy, {
+        t: 1,
+        duration: 1.1,
+        ease: 'power2.in',
+        onUpdate: () => {
+          const pt = rightCrashPath.getPointAtLength(dummy.t * len);
+          blockedPkt.setAttribute('cx', String(pt.x));
+          blockedPkt.setAttribute('cy', String(pt.y));
+          blockedPkt.setAttribute('opacity', '1');
+        },
+      });
+      // impact flash + jitter
+      loop.to('.pi-x', {
+        keyframes: [
+          { scale: 1.25, duration: 0.08 },
+          { scale: 1, duration: 0.18 },
+        ],
+        ease: 'power2.out',
+        transformOrigin: '50% 50%',
+      }, '-=0.05');
+      loop.to(blockedPkt, { opacity: 0, duration: 0.3 });
+    }
+
+    // Pulsing red lock
+    gsap.to('.pi-lock', {
+      scale: 1.08,
+      duration: 1.6,
+      yoyo: true,
+      repeat: -1,
+      ease: 'sine.inOut',
+      transformOrigin: '50% 50%',
+    });
+
+    // Firewall bar glow (subtle stroke pulse)
+    gsap.to('.pi-firewall-bar', {
+      attr: { opacity: 0.55 },
+      duration: 1.4,
+      yoyo: true,
+      repeat: -1,
+      ease: 'sine.inOut',
+    });
+
+    // Full-card horizontal scanner sweep
+    const scanner = ref.current.querySelector<HTMLElement>('.pi-scanner');
+    if (scanner) {
+      gsap.fromTo(
+        scanner,
+        { x: '-20%', opacity: 0 },
+        {
+          x: '120%',
+          opacity: 0.6,
+          duration: 4.5,
+          ease: 'none',
+          repeat: -1,
+          repeatDelay: 1.2,
+          keyframes: [
+            { x: '-20%', opacity: 0, duration: 0 },
+            { opacity: 0.6, duration: 0.8 },
+            { x: '120%', opacity: 0.6, duration: 3.2 },
+            { opacity: 0, duration: 0.5 },
+          ],
+        }
+      );
+    }
+
+    // Live timer text
+    const timerEl = ref.current.querySelector<SVGTextElement>('.pi-timer');
+    if (timerEl) {
+      let t = 42;
+      const tick = () => {
+        if (!timerEl.isConnected) return;
+        t = (t + 17) % 9999;
+        timerEl.textContent = `[t=${(t / 100).toFixed(2)}s]`;
+      };
+      const id = window.setInterval(tick, 380);
+      ScrollTrigger.create({
+        trigger: ref.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        onLeave: () => clearInterval(id),
+        onLeaveBack: () => clearInterval(id),
+      });
+    }
+
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, { scope: ref });
 
@@ -114,6 +244,19 @@ export function ProblemIllustration() {
           backgroundImage:
             'linear-gradient(to right, rgba(45,45,45,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(45,45,45,0.04) 1px, transparent 1px)',
           backgroundSize: '24px 24px',
+        }}
+        aria-hidden="true"
+      />
+      {/* Horizontal scanner line — sweeps left to right continuously */}
+      <div
+        className="pi-scanner absolute top-0 bottom-0 pointer-events-none"
+        style={{
+          width: '70px',
+          left: 0,
+          background:
+            'linear-gradient(90deg, transparent, rgba(224,123,76,0.18), transparent)',
+          opacity: 0,
+          willChange: 'transform, opacity',
         }}
         aria-hidden="true"
       />
@@ -138,11 +281,18 @@ export function ProblemIllustration() {
                   <rect x="15" y="80" width="40" height="40" rx="6" fill="#fff" stroke="var(--color-border-strong)" strokeWidth="1.25" />
                   <circle cx="35" cy="95" r="5" stroke="var(--color-text-dark)" strokeWidth="1" fill="none" />
                   <path d="M28 110 Q35 104 42 110" stroke="var(--color-text-dark)" strokeWidth="1" fill="none" />
-                  <circle cx="52" cy="85" r="1.5" fill="var(--color-success)" />
+                  <circle className="pi-agent-dot" cx="52" cy="85" r="1.5" fill="var(--color-success)" />
                 </g>
                 <text x="35" y="138" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="8" fontFamily="var(--font-mono)" fill="var(--color-text-light)" letterSpacing="0.08em">agent-07</text>
 
-                {/* Dashed flowing arrow */}
+                {/* Hidden path used to drive packet motion */}
+                <path
+                  className="pi-arrow-path-left"
+                  d="M58 100 L140 100"
+                  stroke="none"
+                  fill="none"
+                />
+                {/* Visible dashed flow */}
                 <path
                   className="pi-intended-arrow"
                   d="M58 100 L140 100"
@@ -160,8 +310,13 @@ export function ProblemIllustration() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
+                {/* Flying packets */}
+                <circle className="pi-packet-left" cx="58" cy="100" r="3" fill="var(--color-primary)" opacity="0" />
+                <circle className="pi-packet-left" cx="58" cy="100" r="2.5" fill="var(--color-primary)" opacity="0" />
+                <circle className="pi-packet-left" cx="58" cy="100" r="2" fill="var(--color-primary)" opacity="0" />
+
                 <text x="100" y="88" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="8" fontFamily="var(--font-mono)" fill="var(--color-text-medium)" letterSpacing="0.06em">intended: READ.customers</text>
-                <text x="100" y="116" textAnchor="middle" className="pi-fade" style={{ opacity: 0 }} fontSize="7" fontFamily="var(--font-mono)" fill="var(--color-text-light)" letterSpacing="0.08em">[t=0.42s]</text>
+                <text className="pi-timer pi-fade" x="100" y="116" textAnchor="middle" style={{ opacity: 0 }} fontSize="7" fontFamily="var(--font-mono)" fill="var(--color-text-light)" letterSpacing="0.08em">[t=0.42s]</text>
 
                 {/* Database cylinder */}
                 <g className="pi-fade" style={{ opacity: 0 }}>
@@ -189,8 +344,11 @@ export function ProblemIllustration() {
                   <rect x="8" y="80" width="40" height="40" rx="6" fill="#fff" stroke="var(--color-border-strong)" strokeWidth="1.25" />
                   <circle cx="28" cy="95" r="5" stroke="var(--color-text-dark)" strokeWidth="1" fill="none" />
                   <path d="M21 110 Q28 104 35 110" stroke="var(--color-text-dark)" strokeWidth="1" fill="none" />
-                  <circle cx="45" cy="85" r="1.5" fill="var(--color-success)" />
+                  <circle className="pi-agent-dot" cx="45" cy="85" r="1.5" fill="var(--color-danger)" />
                 </g>
+
+                {/* Hidden path the blocked packet rides */}
+                <path className="pi-arrow-path-right" d="M52 100 L100 100" stroke="none" fill="none" />
 
                 {/* Arrow from agent toward firewall */}
                 <path
@@ -200,6 +358,9 @@ export function ProblemIllustration() {
                   strokeWidth="1.25"
                   fill="none"
                 />
+
+                {/* The packet that gets crashed into the firewall */}
+                <circle className="pi-packet-right" cx="52" cy="100" r="3" fill="var(--color-danger)" opacity="0" />
 
                 {/* Firewall vertical bar */}
                 <rect

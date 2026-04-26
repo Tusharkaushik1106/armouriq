@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40" fill="currentColor">
+  <!-- Verily geometric icon -->
+  <rect x="0" y="0" width="18" height="18" rx="2"/>
+  <path d="M22 0h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H22l16-20z"/>
+  <rect x="0" y="22" width="18" height="18" rx="2"/>
+  <!-- Verily wordmark -->
+  <text x="48" y="30" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" letter-spacing="-0.5">verily</text>
+</svg>

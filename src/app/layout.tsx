@@ -3,6 +3,7 @@ import { Sunflower, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { PageCurtain } from '@/components/PageCurtain';
+import { CustomCursor } from '@/components/CustomCursor';
 
 const sunflower = Sunflower({
   subsets: ['latin'],
@@ -32,9 +33,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sunflower.variable} ${geistMono.variable}`}>
-      <body className="antialiased">
+      <body className="antialiased bg-[var(--color-text-dark)]">
         <PageCurtain />
         <SmoothScroll />
+        <CustomCursor />
         {children}
       </body>
     </html>

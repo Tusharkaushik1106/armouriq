@@ -22,7 +22,7 @@ export function SplitText({
           <span key={i} className="split-mask">
             <span
               className={`split-inner ${innerClassName}`}
-              style={{ transform: 'translateY(100%)' }}
+              style={{ transform: 'translateY(130%)' }}
             >
               {w}
               {i < words.length - 1 ? ' ' : ''}
@@ -39,7 +39,7 @@ export function SplitText({
         <span key={i} className="split-mask">
           <span
             className={`split-inner ${innerClassName}`}
-            style={{ transform: 'translateY(100%)' }}
+            style={{ transform: 'translateY(130%)' }}
           >
             {c === ' ' ? ' ' : c}
           </span>

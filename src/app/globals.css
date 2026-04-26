@@ -53,7 +53,76 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
-.split-mask { display: inline-block; overflow: hidden; vertical-align: bottom; line-height: inherit; }
+.split-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: inherit;
+  padding: 0.15em 0 0.2em;
+  margin: -0.15em 0 -0.2em;
+}
+
+/* ── Custom cursor (qclay-exact: single dot, CSS-transition smoothness) ── */
+.cursor-hidden,
+.cursor-hidden body,
+.cursor-hidden a,
+.cursor-hidden button,
+.cursor-hidden [role="button"],
+.cursor-hidden input,
+.cursor-hidden textarea,
+.cursor-hidden select,
+.cursor-hidden label {
+  cursor: none !important;
+}
+
+.cursor-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #ffffff;
+  mix-blend-mode: difference;
+  /* The transform transition is what creates the buttery 0.3s lag. */
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.3s ease,
+              opacity 0.2s ease;
+  will-change: transform, width, height;
+}
+
+.cursor-dot--hover {
+  width: 60px;
+  height: 60px;
+}
+
+@media (prefers-reduced-motion: reduce),
+       (pointer: coarse) {
+  .cursor-dot { display: none; }
+}
+
+@keyframes hero-badge-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.hero-badge-spin { animation: hero-badge-spin 18s linear infinite; transform-origin: center; }
+
+@keyframes hero-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.hero-marquee-track { animation: hero-marquee 60s linear infinite; }
+
+@keyframes hero-orbit-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.55; }
+}
+.hero-orbit-dot { animation: hero-orbit-pulse 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-badge-spin,
+  .hero-marquee-track,
+  .hero-orbit-dot { animation: none; }
+}
 .split-inner { display: inline-block; will-change: transform; }
 
 .underline-slide {

@@ -1,0 +1,10 @@
+{
+  "gsap": false,
+  "ScrollTrigger": false,
+  "lenis": false,
+  "barba": false,
+  "three": false,
+  "splitType": false,
+  "next": false,
+  "nuxt": false
+}

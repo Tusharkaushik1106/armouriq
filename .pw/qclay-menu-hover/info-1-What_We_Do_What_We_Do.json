@@ -1,0 +1,62 @@
+[
+  {
+    "text": "About UsAbout UsAbout Us",
+    "outer": "<a class=\"animate-link\" style=\"transition: transform 0.3s;\"><span class=\"hidden\">About Us</span><span class=\"animate-link-tr\"><span>About Us</span><span>About Us</span></span><span class=\"hover\"></span></a>",
+    "rect": {
+      "x": 861.296875,
+      "y": 275.5,
+      "w": 198.453125,
+      "h": 58
+    },
+    "transform": "none",
+    "transition": "transform 0.3s",
+    "color": "rgb(0, 0, 0)",
+    "opacity": "1",
+    "fontStyle": "normal",
+    "fontWeight": "400",
+    "textDecoration": "none",
+    "filter": "none",
+    "webkitTextFillColor": "rgb(0, 0, 0)",
+    "textStroke": "0px rgb(0, 0, 0)"
+  },
+  {
+    "text": "What We DoWhat We DoWhat We Do",
+    "outer": "<a class=\"animate-link\" style=\"transform: translate3d(-1.93629px, -0.106889px, 0px); transition: all;\"><span class=\"hidden\">What We Do</span><span class=\"animate-link-tr\"><span>What We Do</span><span>What We Do</span></span><span class=\"hover\"></span></a>",
+    "rect": {
+      "x": 859.360595703125,
+      "y": 355.39312744140625,
+      "w": 266.953125,
+      "h": 58
+    },
+    "transform": "matrix(1, 0, 0, 1, -1.93629, -0.106889)",
+    "transition": "all",
+    "color": "rgb(0, 0, 0)",
+    "opacity": "1",
+    "fontStyle": "normal",
+    "fontWeight": "400",
+    "textDecoration": "none",
+    "filter": "none",
+    "webkitTextFillColor": "rgb(0, 0, 0)",
+    "textStroke": "0px rgb(0, 0, 0)"
+  },
+  {
+    "text": "Our WorksOur WorksOur Works",
+    "outer": "<a class=\"animate-link\" style=\"transition: transform 0.3s;\"><span class=\"hidden\">Our Works</span><span class=\"animate-link-tr\"><span>Our Works</span><span>Our Works</span></span><span class=\"hover\"></span></a>",
+    "rect": {
+      "x": 861.296875,
+      "y": 435.5,
+      "w": 227.84375,
+      "h": 58
+    },
+    "transform": "none",
+    "transition": "transform 0.3s",
+    "color": "rgb(0, 0, 0)",
+    "opacity": "1",
+    "fontStyle": "normal",
+    "fontWeight": "400",
+    "textDecoration": "none",
+    "filter": "none",
+    "webkitTextFillColor": "rgb(0, 0, 0)",
+    "textStroke": "0px rgb(0, 0, 0)"
+  }
+]

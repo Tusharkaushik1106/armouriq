@@ -2,31 +2,41 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 
-const agents = ['support-agent-1', 'analyst-agent', 'billing-bot'];
-const targets = ['CRM', 'Database', 'Email API', 'Billing'];
+const agents = ['support-agent', 'analyst-agent', 'summary-agent'];
+const targets = ['Customer Data', 'Email', 'Calendar', 'Billing'];
 
-type Packet = { label: string; risky: boolean };
+type Packet = { label: string; kind: 'allow' | 'block' | 'downscope'; reason?: string };
 
-const safePackets: Packet[] = [
-  { label: 'GET /customers', risky: false },
-  { label: 'READ billing.summary', risky: false },
-  { label: 'SUMMARIZE emails', risky: false },
-  { label: 'QUERY public.stats', risky: false },
-  { label: 'FETCH /mcp/tools', risky: false },
+// Allowed = action belongs to declared intent
+const allowedPackets: Packet[] = [
+  { label: 'SUMMARIZE inbox.recent', kind: 'allow' },
+  { label: 'READ customer.query', kind: 'allow' },
+  { label: 'QUERY analytics.daily', kind: 'allow' },
+  { label: 'GET schedule.today', kind: 'allow' },
+  { label: 'FETCH /mcp/tools', kind: 'allow' },
 ];
 
-const riskyPackets: Packet[] = [
-  { label: 'DELETE /users/42', risky: true },
-  { label: 'POST /email/send', risky: true },
-  { label: 'WRITE audit.override', risky: true },
-  { label: 'QUERY pii.ssn', risky: true },
-  { label: 'EXEC refund:approve', risky: true },
+// Blocked = exceeds delegated scope
+const blockedPackets: Packet[] = [
+  { label: 'DELETE /users/42', kind: 'block', reason: 'exceeds delegated scope' },
+  { label: 'POST /email/send', kind: 'block', reason: 'outside task scope' },
+  { label: 'WRITE audit.override', kind: 'block', reason: 'policy violation' },
+  { label: 'READ billing.records', kind: 'block', reason: 'outside task scope' },
+  { label: 'EXEC refund:approve', kind: 'block', reason: 'exceeds delegated scope' },
+];
+
+// Down-scoped = allowed but narrowed
+const downscopePackets: Packet[] = [
+  { label: 'READ pii.email', kind: 'downscope', reason: 'masked' },
+  { label: 'QUERY billing.*', kind: 'downscope', reason: '→ billing.summary' },
+  { label: 'LIST contacts', kind: 'downscope', reason: '→ first 25' },
 ];
 
 export function HeroAnimation() {
   const container = useRef<HTMLDivElement>(null);
   const allowedRef = useRef<HTMLSpanElement>(null);
   const blockedRef = useRef<HTMLSpanElement>(null);
+  const downscopedRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
     if (!container.current) return;
@@ -107,22 +117,32 @@ export function HeroAnimation() {
     // Counter
     let allowed = 3812;
     let blocked = 247;
+    let downscoped = 412;
     const setAllowed = (v: number) => {
       if (allowedRef.current) allowedRef.current.textContent = v.toLocaleString();
     };
     const setBlocked = (v: number) => {
       if (blockedRef.current) blockedRef.current.textContent = v.toLocaleString();
     };
+    const setDownscoped = (v: number) => {
+      if (downscopedRef.current) downscopedRef.current.textContent = v.toLocaleString();
+    };
     setAllowed(allowed);
     setBlocked(blocked);
+    setDownscoped(downscoped);
 
-    // Packet loop
+    // Packet loop — pick a verdict mix that mirrors ArmorIQ's three outcomes
     const emitPacket = () => {
       if (!root.isConnected) return;
-      const safe = Math.random() < 0.58;
-      const pool = safe ? safePackets : riskyPackets;
-      const pkt = pool[Math.floor(Math.random() * pool.length)];
-      const willAllow = safe ? Math.random() < 0.9 : Math.random() < 0.2;
+      const r = Math.random();
+      let pkt: Packet;
+      if (r < 0.55) {
+        pkt = allowedPackets[Math.floor(Math.random() * allowedPackets.length)];
+      } else if (r < 0.85) {
+        pkt = blockedPackets[Math.floor(Math.random() * blockedPackets.length)];
+      } else {
+        pkt = downscopePackets[Math.floor(Math.random() * downscopePackets.length)];
+      }
 
       const agentIdx = Math.floor(Math.random() * agents.length);
       const targetIdx = Math.floor(Math.random() * targets.length);
@@ -166,7 +186,7 @@ export function HeroAnimation() {
       tl2.to(el, { x: firewallX - startX - 60, duration: 0.7, ease: 'power2.inOut' });
       tl2.to(el, { duration: 0.3 });
 
-      if (willAllow) {
+      if (pkt.kind === 'allow') {
         tl2.to(el, {
           duration: 0.2,
           onStart: () => {
@@ -181,7 +201,6 @@ export function HeroAnimation() {
           duration: 0.55,
           ease: 'power2.out',
           onStart: () => {
-            // Primary-color pulse ring on allowed
             const ring = document.createElement('div');
             ring.className = 'absolute pointer-events-none rounded-full';
             const firewallInteract = el.getBoundingClientRect();
@@ -208,7 +227,29 @@ export function HeroAnimation() {
           allowed += 1;
           setAllowed(allowed);
         });
+      } else if (pkt.kind === 'downscope') {
+        const reason = pkt.reason ?? 'narrowed';
+        tl2.to(el, {
+          duration: 0.25,
+          onStart: () => {
+            el.style.borderColor = 'var(--color-primary)';
+            el.style.color = 'var(--color-primary)';
+            el.textContent = `↘ DOWN-SCOPED · ${reason}`;
+          },
+        });
+        tl2.to(el, {
+          x: endX - startX - 80,
+          y: endY - startY,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+        tl2.to(el, { opacity: 0, duration: 0.3, ease: 'power2.in' });
+        tl2.call(() => {
+          downscoped += 1;
+          setDownscoped(downscoped);
+        });
       } else {
+        const reason = pkt.reason ?? 'outside task scope';
         tl2.to(el, {
           duration: 0.3,
           keyframes: [
@@ -221,10 +262,10 @@ export function HeroAnimation() {
             el.style.borderColor = 'var(--color-danger)';
             el.style.color = 'var(--color-danger)';
             el.style.background = 'var(--color-danger-bg)';
-            el.textContent = '✕ BLOCKED';
+            el.textContent = `✕ BLOCKED · ${reason}`;
           },
         });
-        tl2.to(el, { opacity: 0, duration: 0.35, ease: 'power2.in' });
+        tl2.to(el, { opacity: 0, duration: 0.45, ease: 'power2.in' });
         tl2.call(() => {
           blocked += 1;
           setBlocked(blocked);
@@ -250,9 +291,9 @@ export function HeroAnimation() {
     <div
       ref={container}
       role="img"
-      aria-label="ArmorIQ firewall inspecting AI agent tool calls and either allowing or blocking them"
+      aria-label="ArmorIQ intent check sitting between AI agents and governance domains — allowing actions inside declared intent, blocking actions outside task scope, down-scoping where policy permits"
       className="relative w-full border border-[var(--color-border-strong)] rounded-[14px] bg-[var(--color-surface)] overflow-hidden card-shadow"
-      style={{ aspectRatio: '1 / 1', minHeight: '420px' }}
+      style={{ aspectRatio: '1 / 1', minHeight: '320px' }}
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -264,9 +305,13 @@ export function HeroAnimation() {
         aria-hidden="true"
       />
 
-      {/* Top label — ArmorIQ, small */}
-      <div className="fw-label-top absolute top-3 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-text-light)] pointer-events-none">
-        ArmorIQ
+      {/* Top label — declared intent in flight */}
+      <div className="fw-label-top absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-text-light)] pointer-events-none whitespace-nowrap">
+        <span>Intent</span>
+        <span aria-hidden="true" className="opacity-50">·</span>
+        <span className="text-[var(--color-text-medium)]">summarize-emails</span>
+        <span aria-hidden="true" className="opacity-50">·</span>
+        <span>ArmorIQ</span>
       </div>
 
       {/* 3 columns */}
@@ -326,17 +371,23 @@ export function HeroAnimation() {
         </div>
       </div>
 
-      {/* Counter */}
-      <div className="fw-counter absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[11px] text-[var(--color-text-light)] whitespace-nowrap">
+      {/* Counter — three verdicts, ArmorIQ vocab */}
+      <div className="fw-counter absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[10px] md:text-[11px] text-[var(--color-text-light)] whitespace-nowrap">
+        <span className="text-[var(--color-success)]">●</span>{' '}
         <span className="text-[var(--color-text-medium)]">ALLOWED</span>{' '}
         <span ref={allowedRef} className="tabular-nums">3,812</span>
         <span className="mx-2 opacity-40">·</span>
+        <span className="text-[var(--color-danger)]">●</span>{' '}
         <span className="text-[var(--color-text-medium)]">BLOCKED</span>{' '}
         <span ref={blockedRef} className="tabular-nums">247</span>
+        <span className="mx-2 opacity-40">·</span>
+        <span className="text-[var(--color-primary)]">●</span>{' '}
+        <span className="text-[var(--color-text-medium)]">DOWN-SCOPED</span>{' '}
+        <span ref={downscopedRef} className="tabular-nums">412</span>
       </div>
 
       <div className="static-packet absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[11px] bg-white border border-[var(--color-success)] text-[var(--color-success)] rounded px-2 py-1 opacity-0 pointer-events-none">
-        ✓ ALLOWED
+        ✓ ALLOWED · matches intent
       </div>
     </div>
   );

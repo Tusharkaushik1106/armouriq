@@ -163,80 +163,60 @@ export function Comparison() {
     const pinRoot = container.current.querySelector<HTMLElement>('.cmp-pin-root');
     if (!pinRoot) return;
 
-    // Pre-state
     const compCols = pinRoot.querySelectorAll<HTMLElement>('.cmp-col-comp');
     const armorCol = pinRoot.querySelector<HTMLElement>('.cmp-col-armor');
-    const interimLabel = pinRoot.querySelector<HTMLElement>('.cmp-interim');
     const finalLabel = pinRoot.querySelector<HTMLElement>('.cmp-final');
+    const interimLabel = pinRoot.querySelector<HTMLElement>('.cmp-interim');
+    if (interimLabel) interimLabel.style.display = 'none';
 
-    gsap.set(compCols, { y: -200, opacity: 0 });
-    gsap.set(armorCol, { x: -200, opacity: 0 });
-    gsap.set([interimLabel, finalLabel], { opacity: 0, y: 12 });
+    gsap.set(compCols, { y: -160, opacity: 0 });
+    gsap.set(armorCol, { x: -160, opacity: 0, scale: 1 });
+    gsap.set(finalLabel, { opacity: 0, y: 12 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: pinRoot,
-        start: 'top top',
-        end: '+=180%',
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
+        start: 'top 70%',
+        once: true,
       },
     });
 
-    // 0-60%: competitor columns drop in sequentially
     compCols.forEach((col, i) => {
       tl.to(
         col,
-        { y: 0, opacity: 1, duration: 0.2, ease: 'power3.in' },
-        i * 0.1
-      );
-      // tiny settle shake
-      tl.fromTo(
-        col,
-        { x: 0 },
-        { x: 0, duration: 0.05, ease: 'none' },
-        i * 0.1 + 0.2
+        { y: 0, opacity: 1, duration: 0.55, ease: 'power3.out' },
+        i * 0.12
       );
     });
 
-    // 60-70%: interim label appears
-    tl.to(interimLabel, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' }, 0.55);
-
-    // 70-90%: ArmorIQ slides in from left
-    tl.to(interimLabel, { opacity: 0, y: -10, duration: 0.1, ease: 'power2.in' }, 0.7);
     tl.to(
       armorCol,
-      { x: 0, opacity: 1, duration: 0.3, ease: 'power4.out' },
-      0.7
+      { x: 0, opacity: 1, duration: 0.7, ease: 'power4.out' },
+      '+=0.1'
     );
-
-    // 90-95%: pulse armor column
-    tl.to(armorCol, { scale: 1.04, duration: 0.1, ease: 'power2.out' }, 1.0);
-    tl.to(armorCol, { scale: 1, duration: 0.15, ease: 'power2.in' }, 1.1);
-
-    // 95-100%: final label fades in
-    tl.to(finalLabel, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' }, 1.15);
+    tl.to(armorCol, { scale: 1.05, duration: 0.18, ease: 'power2.out' }, '-=0.05');
+    tl.to(armorCol, { scale: 1, duration: 0.25, ease: 'power2.inOut' });
+    tl.to(finalLabel, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, '-=0.1');
   }, { scope: container, dependencies: [isDesktop] });
 
   return (
-    <section ref={container} id="comparison" className="py-32 md:py-48 lg:py-56 bg-[var(--color-bg)]">
+    <section ref={container} id="comparison" className="py-20 md:py-48 lg:py-56 bg-[var(--color-bg)]">
       <Container>
-        <div className="max-w-3xl mb-20 md:mb-24">
-          <SectionEyebrow num="05" label="The Comparison" className="mb-6" />
+        <div className="max-w-4xl mx-auto mb-12 md:mb-24 text-center">
+          <SectionEyebrow num="05" label="The Comparison" align="center" className="mb-6" />
           <h2
             className="cmp-heading font-bold text-[var(--color-text-dark)] mb-6"
-            style={{ fontSize: 'clamp(48px, 7vw, 112px)', letterSpacing: '-0.03em', lineHeight: 1.02 }}
+            style={{ fontSize: 'clamp(36px, 7vw, 112px)', letterSpacing: '-0.03em', lineHeight: 1.02 }}
           >
             <SplitText splitBy="word">Why not just use guardrails or IAM?</SplitText>
           </h2>
-          <p className="text-[18px] md:text-[20px] font-light leading-[1.55] text-[var(--color-text-medium)]">
+          <p className="text-[18px] md:text-[20px] font-light leading-[1.55] text-[var(--color-text-medium)] max-w-2xl mx-auto">
             They solve different problems. ArmorIQ fills the gap none of them cover.
           </p>
         </div>
 
         {!showMobile && (
-          <div className="cmp-pin-root relative min-h-screen flex items-center">
+          <div className="cmp-pin-root relative">
             <div className="cmp-table bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 w-full">
               <div className="flex gap-5 items-stretch">
                 {/* Row labels column */}
@@ -341,10 +321,10 @@ export function Comparison() {
           </div>
         )}
 
-        <div className="cmp-closing mt-32 md:mt-40 text-center">
+        <div className="cmp-closing mt-20 md:mt-40 text-center">
           <p
             className="font-bold text-[var(--color-text-dark)] mx-auto max-w-5xl"
-            style={{ fontSize: 'clamp(32px, 4.5vw, 64px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
+            style={{ fontSize: 'clamp(24px, 4.5vw, 64px)', letterSpacing: '-0.02em', lineHeight: 1.2 }}
           >
             <SplitText splitBy="char">Guardrails stop bad responses. </SplitText>
             <span className="relative inline-block">

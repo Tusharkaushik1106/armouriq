@@ -1,0 +1,10 @@
+{
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(0, 0, 0)",
+  "border": "0px none rgb(0, 0, 0)",
+  "borderRadius": "0px",
+  "transform": "none",
+  "width": "100px",
+  "height": "40px",
+  "padding": "0px"
+}
