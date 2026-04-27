@@ -13,6 +13,7 @@
 /.next/
 /out/
 
+
 # production
 /build
 
@@ -38,3 +39,5 @@ next-env.d.ts
 # assignment brief (internal, not committed)
 armoriq-assignment-frontend.docx
 everything.md
+CLAUDE.md
+design_prompts-doc
