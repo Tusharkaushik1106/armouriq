@@ -127,7 +127,7 @@ export function Nav() {
     gsap.fromTo(
       ref.current,
       { y: -40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 2.2 }
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 2.7 }
     );
   }, { scope: ref });
 

@@ -43,7 +43,7 @@ export function CTA() {
     if (!reduced) {
       // Single scrollTrigger-driven timeline for sub + buttons + rule
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: ref.current, start: 'top 65%' },
+        scrollTrigger: { trigger: ref.current, start: 'top 90%' },
       });
       tl.fromTo(
         ref.current.querySelector('.cta-sub'),
@@ -62,6 +62,10 @@ export function CTA() {
           { scaleX: 1, duration: 0.9, ease: 'power3.out' },
           '-=0.3'
         );
+      // Safety net: if ScrollTrigger never fires, ensure visible after a beat.
+      gsap.delayedCall(2, () => {
+        gsap.set(ref.current!.querySelectorAll('.cta-sub, .cta-btn'), { opacity: 1, y: 0, scale: 1 });
+      });
     }
   }, { scope: ref });
 
@@ -69,7 +73,7 @@ export function CTA() {
     <section
       ref={ref}
       id="cta"
-      className="min-h-screen flex items-center bg-[var(--color-surface)] py-32 md:py-48"
+      className="md:min-h-screen flex items-center bg-[var(--color-surface)] py-24 md:py-48"
     >
       <Container className="relative text-center">
         <h2

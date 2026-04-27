@@ -4,6 +4,7 @@ import './globals.css';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { PageCurtain } from '@/components/PageCurtain';
 import { CustomCursor } from '@/components/CustomCursor';
+import { SafetyReveal } from '@/components/SafetyReveal';
 
 const sunflower = Sunflower({
   subsets: ['latin'],
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageCurtain />
         <SmoothScroll />
         <CustomCursor />
+        <SafetyReveal />
         {children}
       </body>
     </html>

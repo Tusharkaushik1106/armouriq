@@ -13,11 +13,12 @@ export function Problem() {
     if (!ref.current) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
-      gsap.set(ref.current.querySelectorAll('.split-inner, .problem-reveal, .problem-badge'), {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      });
+      gsap.set(
+        ref.current.querySelectorAll(
+          '.split-inner, .problem-reveal, .problem-badge, .problem-eyebrow, .problem-body'
+        ),
+        { opacity: 1, y: 0, scale: 1, x: 0 }
+      );
       return;
     }
     const tl = gsap.timeline({

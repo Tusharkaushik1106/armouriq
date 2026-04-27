@@ -20,11 +20,18 @@ export function FooterRevealWrapper({ children, className }: Props) {
       setBottomOffset(Math.min(0, viewportHeight - footerHeight));
     };
     update();
+    // Re-measure after fonts/images settle so the reveal is correct on mobile.
+    const t1 = window.setTimeout(update, 600);
+    const t2 = window.setTimeout(update, 2000);
     window.addEventListener('resize', update);
+    window.addEventListener('orientationchange', update);
     const observer = new ResizeObserver(update);
     observer.observe(el);
     return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener('resize', update);
+      window.removeEventListener('orientationchange', update);
       observer.disconnect();
     };
   }, []);

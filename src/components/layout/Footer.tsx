@@ -13,18 +13,19 @@ export function Footer() {
   useGSAP(() => {
     if (!ref.current) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    gsap.fromTo(
-      ref.current.querySelectorAll('.footer-col'),
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.08,
-        duration: 0.7,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: ref.current, start: 'top 85%' },
-      }
-    );
+    gsap.from(ref.current.querySelectorAll('.footer-col'), {
+      opacity: 0,
+      y: 20,
+      stagger: 0.08,
+      duration: 0.7,
+      ease: 'power3.out',
+      immediateRender: false,
+      scrollTrigger: {
+        trigger: ref.current,
+        start: 'top 95%',
+        toggleActions: 'play none none none',
+      },
+    });
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, { scope: ref });
 

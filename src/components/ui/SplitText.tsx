@@ -32,19 +32,35 @@ export function SplitText({
       </span>
     );
   }
-  const chars = Array.from(children);
+  // Char mode: group chars by word in a non-breaking inline-block so the
+  // browser can't break a single word mid-character. Each char remains its
+  // own .split-mask for the GSAP reveal.
+  const tokens = children.split(/(\s+)/);
   return (
     <span className={className}>
-      {chars.map((c, i) => (
-        <span key={i} className="split-mask">
+      {tokens.map((tok, ti) => {
+        if (tok === '') return null;
+        if (/^\s+$/.test(tok)) {
+          return <span key={`s-${ti}`}>{tok}</span>;
+        }
+        return (
           <span
-            className={`split-inner ${innerClassName}`}
-            style={{ transform: 'translateY(130%)' }}
+            key={`w-${ti}`}
+            style={{ display: 'inline-block', whiteSpace: 'nowrap' }}
           >
-            {c === ' ' ? ' ' : c}
+            {Array.from(tok).map((c, ci) => (
+              <span key={ci} className="split-mask">
+                <span
+                  className={`split-inner ${innerClassName}`}
+                  style={{ transform: 'translateY(130%)' }}
+                >
+                  {c}
+                </span>
+              </span>
+            ))}
           </span>
-        </span>
-      ))}
+        );
+      })}
     </span>
   );
 }

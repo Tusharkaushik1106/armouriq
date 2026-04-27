@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
-import { Button } from '@/components/ui/Button';
 import { QDiscButton } from '@/components/ui/QDiscButton';
 
 type Link = { label: string; href: string };

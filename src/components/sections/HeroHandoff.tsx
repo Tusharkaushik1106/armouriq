@@ -18,7 +18,7 @@ export function HeroHandoff() {
 
     // Intro timeline — on mount (no scroll)
     if (!reduced) {
-      const intro = gsap.timeline({ delay: 2.3 });
+      const intro = gsap.timeline({ delay: 3.0 });
       intro
         .fromTo(
           '.hero-eyebrow',
@@ -118,7 +118,7 @@ export function HeroHandoff() {
     <section
       ref={container}
       id="hero"
-      className="relative min-h-screen bg-[var(--color-bg)] overflow-hidden"
+      className="relative min-h-[88vh] md:min-h-screen bg-[var(--color-bg)] overflow-hidden"
     >
       {/* Decorative full-bleed grid (radial mask so it fades at edges) */}
       <div
@@ -134,10 +134,10 @@ export function HeroHandoff() {
       />
 
       {/* Faint corner brackets */}
-      <span aria-hidden="true" className="hero-corner absolute top-24 left-6 md:left-10 w-12 h-12 border-t-2 border-l-2 border-[var(--color-border-strong)] opacity-50" />
-      <span aria-hidden="true" className="hero-corner absolute top-24 right-6 md:right-10 w-12 h-12 border-t-2 border-r-2 border-[var(--color-border-strong)] opacity-50" />
-      <span aria-hidden="true" className="hero-corner absolute bottom-10 left-6 md:left-10 w-12 h-12 border-b-2 border-l-2 border-[var(--color-border-strong)] opacity-50" />
-      <span aria-hidden="true" className="hero-corner absolute bottom-10 right-6 md:right-10 w-12 h-12 border-b-2 border-r-2 border-[var(--color-border-strong)] opacity-50" />
+      <span aria-hidden="true" className="hero-corner hidden md:block absolute top-24 left-6 md:left-10 w-12 h-12 border-t-2 border-l-2 border-[var(--color-border-strong)] opacity-50" />
+      <span aria-hidden="true" className="hero-corner hidden md:block absolute top-24 right-6 md:right-10 w-12 h-12 border-t-2 border-r-2 border-[var(--color-border-strong)] opacity-50" />
+      <span aria-hidden="true" className="hero-corner hidden md:block absolute bottom-10 left-6 md:left-10 w-12 h-12 border-b-2 border-l-2 border-[var(--color-border-strong)] opacity-50" />
+      <span aria-hidden="true" className="hero-corner hidden md:block absolute bottom-10 right-6 md:right-10 w-12 h-12 border-b-2 border-r-2 border-[var(--color-border-strong)] opacity-50" />
 
       {/* Vertical orbit dots on the left edge — subtle motion ornament */}
       <div aria-hidden="true" className="hidden lg:flex absolute left-12 top-1/2 -translate-y-1/2 flex-col items-center gap-3 z-10">
@@ -150,9 +150,9 @@ export function HeroHandoff() {
         <span className="block w-px h-20 bg-[var(--color-border-strong)]" />
       </div>
 
-      {/* Live verdict marquee — runs along the bottom of the hero */}
+      {/* Live verdict marquee — runs along the bottom of the hero (desktop pin) */}
       <div
-        className="hero-marquee absolute bottom-0 left-0 right-0 z-10 overflow-hidden border-t border-[var(--color-border)] py-3 md:py-4"
+        className="hero-marquee hidden md:block absolute bottom-0 left-0 right-0 z-10 overflow-hidden border-t border-[var(--color-border)] py-3 md:py-4"
         style={{ background: 'var(--color-bg)', isolation: 'isolate' }}
       >
         <div className="hero-marquee-track flex items-center gap-8 md:gap-12 whitespace-nowrap will-change-transform font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] md:tracking-[0.18em] text-[var(--color-text-medium)]">
@@ -210,7 +210,7 @@ export function HeroHandoff() {
         </span>
       </a>
 
-      <div className="relative min-h-screen flex items-center pt-24 md:pt-36 pb-32 md:pb-28">
+      <div className="relative md:min-h-screen flex items-center pt-12 md:pt-20 pb-10 md:pb-28">
         <Container className="w-full">
           <div className="relative w-full">
             {/* Text layer */}
@@ -244,7 +244,7 @@ export function HeroHandoff() {
                     {' '}
                   </span>
                 ))}
-                <span className="rogue-wrap relative inline-block overflow-hidden align-baseline">
+                <span className="rogue-wrap relative inline-block overflow-hidden align-bottom">
                   <span className="split-mask">
                     <span
                       className="split-inner inline-block"
@@ -318,14 +318,38 @@ export function HeroHandoff() {
 
       {/* Mobile fallback — stack the firewall below the hero text */}
       {showMobile && (
-        <div className="px-6 pb-20">
+        <div className="px-6 pb-16">
           <HeroAnimation />
           <p
-            className="mt-6 text-center font-bold text-[var(--color-text-dark)]"
-            style={{ fontSize: 'clamp(24px, 6vw, 36px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
+            className="mt-8 text-center font-bold text-[var(--color-text-dark)]"
+            style={{ fontSize: 'clamp(22px, 5.5vw, 32px)', letterSpacing: '-0.02em', lineHeight: 1.15 }}
           >
             Every action, inspected.
           </p>
+        </div>
+      )}
+
+      {/* Mobile-only verdict marquee at the bottom of the hero (in-flow, no overlap) */}
+      {showMobile && (
+        <div
+          className="overflow-hidden border-t border-[var(--color-border)] py-3"
+          style={{ background: 'var(--color-bg)' }}
+        >
+          <div className="hero-marquee-track flex items-center gap-8 whitespace-nowrap will-change-transform font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-medium)]">
+            {Array.from({ length: 2 }).flatMap((_, dup) =>
+              [
+                { dot: 'var(--color-success)', label: 'ALLOWED · summarize inbox.recent' },
+                { dot: 'var(--color-danger)', label: 'BLOCKED · delete /users/42' },
+                { dot: 'var(--color-primary)', label: 'DOWN-SCOPED · billing.* → billing.summary' },
+                { dot: 'var(--color-success)', label: 'ALLOWED · query analytics.daily' },
+              ].map((it, i) => (
+                <span key={`m-${dup}-${i}`} className="inline-flex items-center gap-3 flex-shrink-0">
+                  <span className="block w-2 h-2 rounded-full flex-shrink-0" style={{ background: it.dot }} />
+                  <span>{it.label}</span>
+                </span>
+              ))
+            )}
+          </div>
         </div>
       )}
     </section>

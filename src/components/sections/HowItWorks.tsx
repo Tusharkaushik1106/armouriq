@@ -88,6 +88,17 @@ export function HowItWorks() {
 
   useGSAP(() => {
     if (!container.current) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      // Show all step illustrations in their final state — no scroll animation.
+      gsap.set(
+        container.current.querySelectorAll(
+          '.s1-row, .step-illu-2, .step-illu-3, .s2-input, .s2-arrow, .s2-blocked, .s2-reason, .s3-line'
+        ),
+        { opacity: 1, x: 0, y: 0, scale: 1 }
+      );
+      return;
+    }
     const mm = gsap.matchMedia();
 
     const playStepAnimation = (panel: HTMLElement) => {
@@ -173,7 +184,24 @@ export function HowItWorks() {
     };
 
 
-// Desktop only: pinned horizontal
+    // Safety net: if any illustration is still invisible 4s after first paint
+    // (e.g. ScrollTrigger never fires under non-standard scroll harnesses),
+    // reveal it so the layout never reads as broken.
+    gsap.delayedCall(4, () => {
+      if (!container.current) return;
+      container.current
+        .querySelectorAll<HTMLElement>(
+          '.s1-row, .step-illu-2, .step-illu-3, .s2-input, .s2-arrow, .s2-blocked, .s2-reason, .s3-line'
+        )
+        .forEach((el) => {
+          const cs = window.getComputedStyle(el);
+          if (parseFloat(cs.opacity) < 0.05) {
+            gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1 });
+          }
+        });
+    });
+
+    // Desktop only: pinned horizontal
     mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
       const track = container.current!.querySelector<HTMLDivElement>('.track');
       const panels = gsap.utils.toArray<HTMLElement>('.panel', container.current!);
@@ -225,25 +253,24 @@ export function HowItWorks() {
       });
     });
 
-    // Mobile only: per-panel fade on scroll
+    // Mobile only: per-panel fade on scroll. Use gsap.from so initial state is
+    // applied only by ScrollTrigger — if ST never fires (Lenis quirks), the
+    // elements remain at their natural visible state.
     mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
       const panels = container.current!.querySelectorAll<HTMLElement>('.panel');
       panels.forEach((p) => {
-        gsap.fromTo(
-          p.querySelectorAll('.panel-content > *'),
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.08,
-            duration: 0.7,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: p, start: 'top 70%' },
-          }
-        );
+        gsap.from(p.querySelectorAll('.panel-content > *'), {
+          opacity: 0,
+          y: 30,
+          stagger: 0.08,
+          duration: 0.7,
+          ease: 'power3.out',
+          immediateRender: false,
+          scrollTrigger: { trigger: p, start: 'top 90%', toggleActions: 'play none none none' },
+        });
         ScrollTrigger.create({
           trigger: p,
-          start: 'top 65%',
+          start: 'top 80%',
           once: true,
           onEnter: () => playStepAnimation(p),
         });

@@ -92,10 +92,10 @@ export function TrustBar() {
   return (
     <section
       ref={ref}
-      className="py-24 md:py-32 bg-white"
+      className="py-12 md:py-32 bg-white"
     >
       <Container>
-        <p className="tb-eyebrow text-center text-[13px] font-mono uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-10">
+        <p className="tb-eyebrow text-center text-[13px] font-mono uppercase tracking-[0.12em] text-[var(--color-text-light)] mb-6 md:mb-10">
           <SplitText splitBy="char">Trusted by security leaders from teams at</SplitText>
         </p>
 
@@ -147,13 +147,13 @@ export function TrustBar() {
         {showMobile && (
           <Marquee speed={40}>
             {logos.map((l) => (
-              <div key={l} className="flex items-center justify-center px-8">
+              <div key={l} className="flex items-center justify-center px-6 h-10 min-w-[120px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/images/logos/${l}.svg`}
                   alt={`${l} logo`}
-                  className="max-h-5 w-auto"
-                  style={{ filter: 'grayscale(1) brightness(0.4)', opacity: 0.6 }}
+                  className="h-7 w-auto"
+                  style={{ filter: 'grayscale(1) brightness(0.4)', opacity: 0.65 }}
                 />
               </div>
             ))}

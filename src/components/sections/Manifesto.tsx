@@ -32,18 +32,15 @@ function ManifestoMobile({ lines }: { lines: Line[] }) {
       return;
     }
     els.forEach((el) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, y: 30, scale: 0.96 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-        }
-      );
+      gsap.from(el, {
+        opacity: 0,
+        y: 30,
+        scale: 0.96,
+        duration: 0.8,
+        ease: 'power3.out',
+        immediateRender: false,
+        scrollTrigger: { trigger: el, start: 'top 95%', once: true, toggleActions: 'play none none none' },
+      });
     });
     underlines.forEach((u) => {
       gsap.fromTo(

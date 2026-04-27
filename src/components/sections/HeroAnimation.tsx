@@ -306,7 +306,7 @@ export function HeroAnimation() {
       />
 
       {/* Top label — declared intent in flight */}
-      <div className="fw-label-top absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-text-light)] pointer-events-none whitespace-nowrap">
+      <div className="fw-label-top absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 font-mono text-[8px] md:text-[9px] uppercase tracking-[0.16em] md:tracking-[0.2em] text-[var(--color-text-light)] pointer-events-none whitespace-nowrap max-w-[calc(100%-1rem)] overflow-hidden">
         <span>Intent</span>
         <span aria-hidden="true" className="opacity-50">·</span>
         <span className="text-[var(--color-text-medium)]">summarize-emails</span>
@@ -372,7 +372,7 @@ export function HeroAnimation() {
       </div>
 
       {/* Counter — three verdicts, ArmorIQ vocab */}
-      <div className="fw-counter absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[10px] md:text-[11px] text-[var(--color-text-light)] whitespace-nowrap">
+      <div className="fw-counter absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[8px] md:text-[11px] text-[var(--color-text-light)] whitespace-nowrap max-w-[calc(100%-1rem)] overflow-hidden text-ellipsis">
         <span className="text-[var(--color-success)]">●</span>{' '}
         <span className="text-[var(--color-text-medium)]">ALLOWED</span>{' '}
         <span ref={allowedRef} className="tabular-nums">3,812</span>

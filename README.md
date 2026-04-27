@@ -1,40 +1,32 @@
-# ArmorIQ Landing — Redesign
+# ArmorIQ Landing
 
-A redesigned, animated landing page for ArmorIQ, an AI agent security platform. ArmorIQ is a firewall for AI agent actions — it enforces agent intent cryptographically and blocks unauthorized tool calls before they execute.
+Marketing site for ArmorIQ. Single-page Next.js app, GSAP-driven, light-theme only.
 
 ## Setup
 
-```bash
+```
 npm install
-npm run dev
-```
-
-Open http://localhost:3000
-
-## Build
-
-```bash
+npm run dev      # localhost:3000 (or 3001 if 3000 is busy)
 npm run build
-npm run start
+npm run lint
 ```
 
-## Tech stack
+Node 18+, no env vars, no backend. Logos live in `public/images/logos/`.
 
-- Next.js 14 (App Router) + TypeScript strict (no `any`)
-- Tailwind CSS v4 with `@theme` tokens in `globals.css`
-- GSAP 3.14.2 + @gsap/react (`useGSAP` hook) + Flip plugin
-- Lenis smooth scroll
-- Google Fonts via `next/font`: Sunflower (display + body) + JetBrains Mono (technical labels — `Geist Mono` isn't available in Next 14's font-data manifest, so JetBrains Mono is used as a close-match monospace via the `--font-geist-mono` CSS variable)
+## Notes
 
-## Design & animation decisions
+The loader zooms into a faint ArmorIQ shield in its background while the page itself scales in from behind — the shield then re-appears as the nav logo, so it reads as one continuous arrival instead of a curtain wipe. The hero uses a pinned scroll-scrub on desktop (headline hands off into the firewall illustration) but drops the pin on mobile and just stacks them, since pinning at small heights felt cramped. Animations are GSAP + Lenis throughout; every section has a reduced-motion fallback.
 
-The design brief specified a warm editorial palette (terracotta orange on white) with Sunflower and Geist Mono, and tasked redesigning + animating a landing page for an AI-agent security product. My core insight was that the product concept *is* the animation — ArmorIQ is a firewall that inspects AI agent actions, so the hero visualization shows agents emitting tool calls (packets), a central firewall inspecting each with a pause + scanning line, and verdicts played out with allowed/blocked outcomes (mutating labels, counter increments, target flashes on allow, shake + flash on block). Every section carries intentional motion that serves meaning: character-level headline reveals via a custom SplitText component (replacing the paid GSAP plugin), a pinned horizontal scroll for the 3-stage "How It Works" flow, GSAP Flip for the products grid to animate cards from a stacked deck to a grid on entry, and a column-drop comparison table where the ArmorIQ column lands last with emphasis. Marquee dividers run uppercase technical vocabulary ("INTENT · POLICY · AUDIT") between sections for pace and rhythm. Smooth scroll via Lenis ties the page together. All animations respect `prefers-reduced-motion`: the hero falls back to a static composed snapshot, scroll triggers disable, Lenis is skipped, and marquees pause. No component libraries — every primitive (Button, Badge, Container, Marquee, MagneticButton, SplitText, PageCurtain, MobileDrawer) is hand-built. Zero `any` types. Orange is used as an accent only — primary CTA fill, one-word emphasis on closing lines ("rogue.", "control", "ArmorIQ controls behavior."), and allowed-state indicators; the page reads warm-white with orange highlights, never orange-heavy.
+## Layout
 
-## Video walkthrough script (for recording)
+```
+src/app/         layout, page composition, globals.css (Tailwind v4 @theme tokens)
+src/components/
+  layout/        Nav, MobileDrawer, FullscreenMenu, Footer, FooterRevealWrapper, AnnouncementBar
+  sections/      one file per landing section, in render order
+  ui/            Button, QDiscButton, MagneticButton, SplitText, Marquee, Container, Badge, SectionEyebrow
+  PageCurtain, SmoothScroll, CustomCursor, SafetyReveal
+src/lib/         gsap.ts (plugin registration), useMediaQuery
+```
 
-> **0–6s** Land on page. Curtain pulls up, hero characters reveal, firewall animation starts.
-> **6–18s** Scroll past the marquee divider, through the trust bar and problem section.
-> **18–30s** Enter HowItWorks — show the horizontal scroll in action.
-> **30–42s** Continue to Products (Flip reveal) and Comparison (column drop).
-> **42–55s** Open mobile view. Open the nav drawer. Scroll through mobile layout.
-> **55–60s** Wrap.
+Render order is in `src/app/page.tsx`. Section IDs (`#hero`, `#problem`, `#how-it-works`, `#products`, `#comparison`, `#faq`, `#cta`) are what the nav links target.

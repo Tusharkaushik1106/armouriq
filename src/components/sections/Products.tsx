@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState } from 'react';
-import type { ReactNode, MouseEvent as ReactMouseEvent } from 'react';
+import type { ReactNode } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Container } from '@/components/ui/Container';
 import { SplitText } from '@/components/ui/SplitText';
@@ -129,7 +129,6 @@ const products: Product[] = [
 export function Products() {
   const container = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const discRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
 
@@ -158,7 +157,21 @@ export function Products() {
       });
     }
     // Pre-hide product cards so the click-to-expand can fade them in cleanly.
-    if (gridRef.current) {
+    // Only do this on viewports/contexts where the trigger overlay is meaningful
+    // (motion-allowed + wide enough to overlay the grid). On mobile or reduced motion,
+    // skip the trigger flow and show the grid directly.
+    const reducedP = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileP = window.innerWidth < 768;
+    if (reducedP || isMobileP) {
+      setExpanded(true);
+      if (gridRef.current) {
+        gsap.set(gridRef.current.querySelectorAll('.product-card'), {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        });
+      }
+    } else if (gridRef.current) {
       gsap.set(gridRef.current.querySelectorAll('.product-card'), {
         opacity: 0,
         y: 30,
@@ -171,8 +184,8 @@ export function Products() {
   // Cursor-following internal disc removed — the global custom cursor
   // (10px → 60px, mix-blend-difference) handles the hover affordance.
   // Keeping no-op handlers so the JSX bindings below still compile.
-  const handleEnter = (_e: ReactMouseEvent) => {};
-  const handleMove = (_e: ReactMouseEvent) => {};
+  const handleEnter = () => {};
+  const handleMove = () => {};
   const handleLeave = () => {};
 
   const handleExpand = () => {
